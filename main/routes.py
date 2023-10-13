@@ -183,6 +183,45 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
+'''WEATHER AND SOIL APIs'''
+
+@app.route('/dashboard')
+def weatherinfo():
+    response = requests.get('http://ip-api.com/json/')
+
+    if response.status_code != 200:
+        return 'Could not get location information.'
+
+    location_data = response.json()
+    session['location'] = location_data
+
+    lat = location_data.get('lat')
+    lon = location_data.get('lon')
+
+#fetching weather data.
+    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
+    response = requests.get(weather_url)
+
+    if response.status_code != 200:
+        return 'Could not get weather information.'
+
+    weather_data = response.json()
+    #print(weather_data)  # Print out the data to understand the structure
+
+    #fetching soil data.
+    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
+    headers = {"x-api-key": AMBEEDATA_API_KEY}
+    response = requests.get(soil_url, headers=headers)
+    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+
+    if response.status_code != 200:
+        return 'Could not get soil information.'
+    else:
+        soil_data = response.json()
+        #print(soil_data )
+
+    return render_template('weather.html', weather_data=weather_data, soil_data=soil_data)
 
 @app.route("/blogpost", methods=['GET', 'POST'])
 @login_required
@@ -380,49 +419,6 @@ def get_pest_control_advice():
     except Exception as e:
         # Handle errors appropriately
         return jsonify({"error": str(e)})
-    
-'''WEATHER AND SOIL APIs'''
-
-@app.route('/weather')
-def weatherinfo():
-    response = requests.get('http://ip-api.com/json/')
-
-    if response.status_code != 200:
-        return 'Could not get location information.'
-
-    location_data = response.json()
-    session['location'] = location_data
-
-    lat = location_data.get('lat')
-    lon = location_data.get('lon')
-
-#fetching weather data.
-    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
-    response = requests.get(weather_url)
-
-    if response.status_code != 200:
-        return 'Could not get weather information.'
-
-    weather_data = response.json()
-    #print(weather_data)  # Print out the data to understand the structure
-    return render_template('weather.html', weather_data=weather_data)
-
-@app.route('/soil')
-def soilinfo():
-    #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
-    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
-    headers = {"x-api-key": AMBEEDATA_API_KEY}
-    response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
-
-    if response.status_code != 200:
-        return 'Could not get soil information.'
-    else:
-        soil_data = response.json()
-        #print(soil_data )
-
-    return render_template('soil.html',  soil_data=soil_data)
 
 
 '''TESTING THE APIs'''

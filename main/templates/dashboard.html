@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/main.css')}}" />
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <div class="navbar">
+        <div class="logo">
+          <img src="{{ url_for('static', filename='assets/logo.png')}}" alt="">
+          <h1>AGRISENSE</h1>
+        </div>
+        <ul>
+          <li><a href="#" class="active">
+            <i class="fas fa-user"></i>
+            <span class="nav-item">Home</span>
+          </a>
+          </li>
+          <li><a href="farminginfo">
+            <i class="fas fa-chart-bar"></i>
+            <span class="nav-item">Crops</span>
+          </a>
+          </li>
+          <li><a href="#">
+            <i class="fas fa-tasks"></i>
+            <span class="nav-item">Marketplace</span>
+          </a>
+          </li>
+          <li><a href="#">
+            <i class="fab fa-dochub"></i>
+            <span class="nav-item">Profile</span>
+          </a>
+          </li>
+          <li><a href="#">
+            <i class="fas fa-question-circle"></i>
+            <span class="nav-item">Help</span>
+          </a>
+          </li>
+          <li><a href="{{url_for('logout')}}" class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Logout</span>
+          </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="container">
+        <div class="row">
+          <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+      </main>
+  </div>
+
+</body>
+</html>
