@@ -184,100 +184,51 @@ def reset_token(token):
 
 
 
-base_url = 'https://api.openai.com/v1'
+
+'''
+WORKING WITH API
+'''
+load_dotenv()
+app.secret_key = os.getenv('APPSECRET_KEY')
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
+OPEN_API_KEY = os.getenv('OPENAI_KEY')
+openai.api_key = OPEN_API_KEY
+hf_api_key = os.getenv('HF_API_KEY')
+
+'''
+1. OPENAI API
+'''
+base_url = "https://api.openai.com/v1/"
 
 
-@app.route('/generate')
-def generate():
-    # Set the request body
+'''Image Model DallE'''
+def dalle_image(prompt, size):
+
     data = {
-        'prompt': 'a fish',
-        'size': '1024x1024',
-        'response_format': 'url'
+        "prompt": prompt,
+        "size": size,
+        # Fill in this line, (prompt)
+        # Fill in this line, (size)
+        'response_format': 'b64_json',
     }
 
-    # Send a request to OpenAI to generate the image
+    # download and transform the image
     response = requests.post(
-        f'{base_url}/images/generations',
-        headers={'Authorization': f'Bearer {OPENAI_API_KEY}'},
+        base_url + '/images/generations',
+        headers={'Authorization': f'Bearer {OPEN_API_KEY}'},
         json=data
     )
+    b64_image_data = response.json().get('data', [])[0].get('b64_json', '')
 
-    if response.status_code == 200:
-        image_url = response.json().get('url')
+    decoded_image = base64.b64decode(b64_image_data)
+    image = Image.open(BytesIO(decoded_image))
 
-        # Render the HTML template with the image URL
-        return render_template('image.html', image_url=image_url)
-    else:
-        return 'Error generating the image.' 
-    
-    
-    
-    
-    
-    
-    # Load environment variables
-load_dotenv()
+    return image
 
-# Flask setup
-
-app.secret_key = os.getenv('APPSECRET_KEY')
-
-# OpenWeatherMap API Key
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
-
-
-@app.route('/weather')
-def index():
-    response = requests.get('http://ip-api.com/json/')
-
-    if response.status_code != 200:
-        return 'Could not get location information.'
-
-    location_data = response.json()
-    session['location'] = location_data
-
-    lat = location_data.get('lat')
-    lon = location_data.get('lon')
-
-#fetching weather data.
-    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
-    response = requests.get(weather_url)
-
-    if response.status_code != 200:
-        return 'Could not get weather information.'
-
-    weather_data = response.json()
-    #print(weather_data)  # Print out the data to understand the structure
-
-  #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
-    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
-    headers = {"x-api-key": AMBEEDATA_API_KEY}
-    response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
-
-    if response.status_code != 200:
-        return 'Could not get soil information.'
-    else:
-        soil_data = response.json()
-        #print(soil_data )
-
-    return render_template('display.html', weather_data=weather_data, soil_data=soil_data)
-
-
-
-# Your OpenAI API token
-openai_token = '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'
-
-base_url = "https://api.openai.com/v1/"
-url = 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2'
-
-
-    
-def generate_image(api_key, text):
+'''Image Model with Stable Diffusion'''
+def stablediffusion_image(hf_api_key, text):
     url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
-    headers = {"Authorization": f"Bearer {api_key}"}
+    headers = {"Authorization": f"Bearer {hf_api_key}"}
 
     data = {"inputs": text}
 
@@ -293,74 +244,7 @@ def generate_image(api_key, text):
 
     return None
 
-
-# Route for the home page
-@app.route('/openai', methods=['GET', 'POST'])
-def dalle():
-    image_data = None
-    if request.method == 'POST':
-        prompt = request.form.get('prompt')
-        size = request.form.get('size')
-        image = DallEImage().get_image_from_dalle(prompt, size)
-        
-        # Convert the image to bytes and encode it in base64
-        buffered = io.BytesIO()
-        image.save(buffered, format="PNG")
-        image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-    return render_template('openai.html', image_data=image_data) 
-
-
-hf_api_key = "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"
-
-@app.route('/huggingface', methods=['GET', 'POST'])
-def huggingface():
-    image_data = None
-    if request.method == 'POST':
-        text = request.form.get('text')
-        image_bytes = generate_image(hf_api_key, text)
-
-        if image_bytes:
-            # Convert the image bytes to base64
-            image_data = base64.b64encode(image_bytes).decode('utf-8')
-
-    return render_template('huggingface.html', image_data=Markup(image_data))
-
-
-
-
-
-
-
-
-OPENAI_API_KEY = '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'
-openai.api_key = OPENAI_API_KEY
-chat_log = []
-
-class DallEImage:
-    def get_image_from_dalle(self, prompt, size):
- 
-        data = {
-            "prompt": prompt,
-            "size": size,
-            # Fill in this line, (prompt)
-            # Fill in this line, (size)
-            'response_format': 'b64_json',
-        }
-
-        # download and transform the image
-        response = requests.post(
-            base_url + '/images/generations',
-            headers={'Authorization': f'Bearer {OPENAI_API_KEY}'},
-            json=data
-        )
-        b64_image_data = response.json().get('data', [])[0].get('b64_json', '')
-
-        decoded_image = base64.b64decode(b64_image_data)
-        image = Image.open(BytesIO(decoded_image))
-
-        return image  # fill in this line
-
+'''ChatCompletion Model'''
 chat_log = []
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
@@ -402,15 +286,6 @@ def farminginfo():
     form = FarmingInfoForm()
 
     if request.method == 'POST' and form.validate_on_submit():
-        # Retrieve user responses from the form
-        q1 = form.q1.data
-        q2 = form.q2.data
-        q3 = form.q3.data
-        q4 = form.q4.data
-        q5 = form.q5.data
-        q6 = form.q6.data
-
-
         # Create a message for the GPT-4 model
         user_message = f"based on this weather data: {weather_data} and this soil information:{soil_data}, suggest four crops to plant that will grow well with such weather conditions and soil information."
         #user_message = f"name one crop"
@@ -436,15 +311,15 @@ def farminginfo():
             model="gpt-3.5-turbo",
             messages=chat_log + [{"role": "user", "content": first_crop}]
         )
-        firstt_crop = response2['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": firstt_crop})
+        crops = response2['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": crops})
         #chat_log.append(firstt_crop)
         
         
         image_data = None
-        prompt = f"generate four seperate different realistic seed images of each of the crops in: {firstt_crop}"
+        prompt = f"generate four seperate different realistic seed images of each of the crops in: {crops}"
         size = "512x512"
-        image = DallEImage().get_image_from_dalle(prompt, size)
+        image = dalle_image(prompt, size)
         
         # Convert the image to bytes and encode it in base64
         buffered = io.BytesIO()
@@ -452,12 +327,12 @@ def farminginfo():
         image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
         # Render the 'gpt.html' template with the form and response
-        return render_template('farminginfo.html', title='farminginfo', form=form, assistant_response=assistant_response,firstt_crop=firstt_crop, image_data=image_data)
+        return render_template('farminginfo.html', title='farminginfo', form=form, assistant_response=assistant_response,firstt_crop=crops, image_data=image_data)
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
     return render_template('farminginfo.html', title='farminginfo', form=form)
 
-
+'''Pest Control Suggestion Model'''
 
 @app.route('/get_pest_control', methods=['POST'])
 def get_pest_control_advice():
@@ -478,12 +353,84 @@ def get_pest_control_advice():
         # Extract the assistant's response from the model's output
         assistant_response = response['choices'][0]['message']['content']
 
-        # Return the pest control advice generated by the model
-        pest_control_advice = f"Here is some pest control advice for the suggested crops: ..."
-
         return jsonify({"pestControlAdvice": assistant_response})
 
     except Exception as e:
         # Handle errors appropriately
         return jsonify({"error": str(e)})
+    
+'''WEATHER AND SOIL APIs'''
+
+@app.route('/weather')
+def weatherinfo():
+    response = requests.get('http://ip-api.com/json/')
+
+    if response.status_code != 200:
+        return 'Could not get location information.'
+
+    location_data = response.json()
+    session['location'] = location_data
+
+    lat = location_data.get('lat')
+    lon = location_data.get('lon')
+
+#fetching weather data.
+    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
+    response = requests.get(weather_url)
+
+    if response.status_code != 200:
+        return 'Could not get weather information.'
+
+    weather_data = response.json()
+    #print(weather_data)  # Print out the data to understand the structure
+    return render_template('weather.html', weather_data=weather_data)
+
+@app.route('/soil')
+def soilinfo():
+    #fetching soil data.
+    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
+    headers = {"x-api-key": AMBEEDATA_API_KEY}
+    response = requests.get(soil_url, headers=headers)
+    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+
+    if response.status_code != 200:
+        return 'Could not get soil information.'
+    else:
+        soil_data = response.json()
+        #print(soil_data )
+
+    return render_template('soil.html',  soil_data=soil_data)
+
+
+'''TESTING THE APIs'''
+# Route for the home page
+@app.route('/openai', methods=['GET', 'POST'])
+def dalle():
+    image_data = None
+    if request.method == 'POST':
+        prompt = request.form.get('prompt')
+        size = request.form.get('size')
+        image = dalle_image(prompt, size)
+        
+        # Convert the image to bytes and encode it in base64
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")
+        image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+    return render_template('openai.html', image_data=image_data) 
+
+@app.route('/huggingface', methods=['GET', 'POST'])
+def huggingface():
+    image_data = None
+    if request.method == 'POST':
+        text = request.form.get('text')
+        image_bytes = stablediffusion_image(hf_api_key, text)
+
+        if image_bytes:
+            # Convert the image bytes to base64
+            image_data = base64.b64encode(image_bytes).decode('utf-8')
+
+    return render_template('huggingface.html', image_data=Markup(image_data))
+
 
