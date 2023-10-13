@@ -182,6 +182,10 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 
 
 
