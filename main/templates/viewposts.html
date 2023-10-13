@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="container-fluid">
+    <h1 class="mt-5">Community Posts</h1>
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-12 mb-4">
+
+            {% for content in blogpost %}
+                <article class="media content-section">
+                    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profilepics/' + content.user.image_file) }}">
+                <div class="media-body">
+                    <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ content.user.username }}</a>
+                    <small class="text-muted">{{ content.date_posted.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                    <p class="article-content">{{ content.title }}</p>
+                    <p class="article-content">{{ content.content }}</p>
+                </div>
+                </article>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>    
+
+
+
+
+<style>
+
+.divider {
+        border-top: 1px solid #ccc;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+</style>
+
+{% endblock content %}
