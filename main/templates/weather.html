@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Information</title>
+</head>
+<body>
+    <h1>Weather Information for {{ weather_data.name }}</h1>
+    <p>Temperature: {{ weather_data.main.temp }}&#8451; (Feels Like: {{ weather_data.main.feels_like }}&#8451;)</p>
+    <p>Weather: {{ weather_data.weather[0].description }} <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon"></p>
+    <p>Wind: {{ weather_data.wind.speed }} mps, Direction: {{ weather_data.wind.deg }}°</p>
+    <p>Pressure: {{ weather_data.main.pressure }} hPa</p>
+    <p>Humidity: {{ weather_data.main.humidity }}%</p>
+    <p>Cloud Coverage: {{ weather_data.clouds.all }}%</p>
+    <p>Visibility: {{ weather_data.visibility }} m</p>
+
+</body>
+</html>
