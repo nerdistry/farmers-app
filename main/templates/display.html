@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Information</title>
+</head>
+<body>
+    <h1>Weather Information for {{ weather_data.name }}</h1>
+    <p>Temperature: {{ weather_data.main.temp }}&#8451; (Feels Like: {{ weather_data.main.feels_like }}&#8451;)</p>
+    <p>Weather: {{ weather_data.weather[0].description }} <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon"></p>
+    <p>Wind: {{ weather_data.wind.speed }} mps, Direction: {{ weather_data.wind.deg }}°</p>
+    <p>Pressure: {{ weather_data.main.pressure }} hPa</p>
+    <p>Humidity: {{ weather_data.main.humidity }}%</p>
+    <p>Cloud Coverage: {{ weather_data.clouds.all }}%</p>
+    <p>Visibility: {{ weather_data.visibility }} m</p>
+
+  <h1>Soil Information</h1>
+    {% if soil_data %}
+        <li><strong>Message:</strong> {{ soil_data.message }}</li>
+    <li><strong>Stations:</strong>
+        <ul>
+            <li>CO content: {{ soil_data.stations[0].CO }}</li>
+            <li>NO2 content: {{ soil_data.stations[0].NO2 }}</li>
+            <li>OZONE content: {{ soil_data.stations[0].OZONE }}</li>
+            <li>PM10 content: {{ soil_data.stations[0].PM10 }}</li>
+            <li>PM25 content: {{ soil_data.stations[0].PM25 }}</li>
+            <li>SO2 content: {{ soil_data.stations[0].SO2 }}</li>
+            <li>City: {{ soil_data.stations[0].city }}</li>
+            <li>Country Code: {{ soil_data.stations[0].countryCode }}</li>
+            <li>Division: {{ soil_data.stations[0].division }}</li>
+            <li>Latitude: {{ soil_data.stations[0].lat }}</li>
+            <li>Longitude: {{ soil_data.stations[0].lng }}</li>
+            <li>Place Name: {{ soil_data.stations[0].placeName }}</li>
+            <li>Postal Code: {{ soil_data.stations[0].postalCode }}</li>
+            <li>State: {{ soil_data.stations[0].state }}</li>
+            <li>Updated At: {{ soil_data.stations[0].updatedAt }}</li>
+            <li>AQI: {{ soil_data.stations[0].AQI }}</li>
+            <li>AQI Info:
+                <ul>
+                    <li>Pollutant: {{ soil_data.stations[0].aqiInfo.pollutant }}</li>
+                    <li>Concentration: {{ soil_data.stations[0].aqiInfo.concentration }}</li>
+                    <li>Category: {{ soil_data.stations[0].aqiInfo.category }}</li>
+                </ul>
+            </li>
+    {% else %}
+        <p>No soil information available.</p>
+    {% endif %}
+
+</body>
+</html>

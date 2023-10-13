@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<form id="questions" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.q1.label }} <br>
+    {{ form.q1 }} <br><br>
+
+    {{ form.q2.label }} <br>
+    {{ form.q2 }} <br><br>
+
+    {{ form.q3.label }} <br>
+    {{ form.q3 }} <br><br>
+
+    {{ form.q4.label }} <br>
+    {{ form.q4 }} <br><br>
+
+    {{ form.q5.label }} <br>
+    {{ form.q5 }} <br><br>
+
+    {{ form.q6.label }} <br>
+    {{ form.q6 }} <br><br>
+
+    <button type="submit">Submit</button><br><br>
+
+    <div>
+        <h2>Response</h2>
+        <textarea id="response" rows="30" style="width: 80%;" readonly>{{ assistant_response }}</textarea>
+    </div>
+</form>
+{% endblock content %}

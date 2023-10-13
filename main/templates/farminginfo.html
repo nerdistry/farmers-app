@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.q1.label }} <br>
+    {{ form.q1 }} <br><br>
+
+    {{ form.q2.label }} <br>
+    {{ form.q2 }} <br><br>
+
+    {{ form.q3.label }} <br>
+    {{ form.q3 }} <br><br>
+
+    {{ form.q4.label }} <br>
+    {{ form.q4 }} <br><br>
+
+    {{ form.q5.label }} <br>
+    {{ form.q5 }} <br><br>
+
+    {{ form.q6.label }} <br>
+    {{ form.q6 }} <br><br>
+
+    <button type="submit">Submit</button><br><br>
+
+    <div>
+        <h2>Response</h2>
+        <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
+        <textarea id="response2" name="first_crop" rows="10" style="width: 80%;" readonly>{{ firstt_crop }}</textarea><br>
+        <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
+        <br><br>
+    </div>
+</form>
+
+<!-- Add a new form for pest control advice -->
+<form method="POST">
+    <button id="pest-control-button" type="button">Get Pest Control Advice</button>
+    <div>
+        <h2>Pest Control Advice</h2>
+        <textarea id="pest-control-advice" rows="10" style="width: 80%;" readonly></textarea>
+    </div>
+</form>
+
+<script>
+    const form = document.querySelector('form');
+    const chatBox = document.getElementById('response');
+    const pestControlButton = document.getElementById('pest-control-button');
+    const pestControlAdviceBox = document.getElementById('pest-control-advice');
+
+    // Event listener for the pest control button
+    pestControlButton.addEventListener('click', async () => {
+        const cropSuggestions = chatBox.value; // Retrieve the crop suggestions from the response textarea
+
+        // Send the crop suggestions to the server to get pest control advice
+        const response = await fetch('/get_pest_control', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ assistantResponse: cropSuggestions }), // Send the assistant's response
+        });
+
+        if (response.ok) {
+            const { pestControlAdvice } = await response.json();
+            
+            // Display the pest control advice in the new textarea
+            pestControlAdviceBox.value = pestControlAdvice;
+        } else {
+            alert('Error: Unable to get pest control advice.');
+        }
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hugging Face Image Generation</title>
+</head>
+<body>
+    <h1>Hugging Face Image Generation</h1>
+    <form method="POST" action="/huggingface">
+        <label for="text">Text:</label>
+        <input type="text" name="text" required>
+        <br>
+        <input type="submit" value="Generate Image">
+    </form>
+    
+    {% if image_data %}
+    <h2>Generated Image:</h2>
+    <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
+    {% else %}
+    <p>No image generated.</p>
+    {% endif %}
+</body>
+</html>
