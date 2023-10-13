@@ -5,3 +5,6 @@ main/.env
 ./main/.env
 # Ignore Python __pycache__ directories
 __pycache__/
+
+main/__pycache__/
+
