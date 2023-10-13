@@ -2,6 +2,6 @@ desktop.ini
 main/.env
 # Ignore Python compiled files
 *.pyc
-
+./main/.env
 # Ignore Python __pycache__ directories
 __pycache__/
