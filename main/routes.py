@@ -8,8 +8,8 @@ from flask import jsonify, render_template, sessions, url_for, flash, redirect, 
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
-from main.forms import RegistrationForm, LoginForm, FarmingInfoForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
-from main.models import User
+from main.forms import RegistrationForm, LoginForm, FarmingInfoForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
+from main.models import BlogPost, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -182,6 +182,28 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
+
+
+@app.route("/blogpost", methods=['GET', 'POST'])
+@login_required
+def blogpost():
+    form = BlogPostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        post = BlogPost(title=title, content=content, user=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your blog post has been sent!', 'success')
+        return redirect(url_for('blogpost'))
+    return render_template('blogpost.html', form=form)
+
+@app.route("/viewposts")
+@login_required
+def viewposts():
+    blogpost = BlogPost.query.all()
+    
+    return render_template('viewposts.html', blogpost=blogpost)
 
 
 

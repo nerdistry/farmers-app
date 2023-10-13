@@ -74,7 +74,14 @@ class ResetPasswordForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
     
-               
+
+class BlogPostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+          
     
 class FarmingInfoForm(FlaskForm):
     q1 = SelectField('What is the average temperature range in your area during the growing season?',
