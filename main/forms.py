@@ -82,7 +82,7 @@ class BlogPostForm(FlaskForm):
 
 
           
-    
+'''
 class FarmingInfoForm(FlaskForm):
     q1 = SelectField('What is the average temperature range in your area during the growing season?',
                     choices=[
@@ -139,3 +139,4 @@ class FarmingInfoForm(FlaskForm):
                         ('1500-2000 meters (Mountainous)', '1500-2000 meters (Mountainous)'),
                         ('Above 2000 meters (High Alpine)', 'Above 2000 meters (High Alpine)')
                     ])
+'''

@@ -8,7 +8,7 @@ from flask import jsonify, render_template, sessions, url_for, flash, redirect, 
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
-from main.forms import RegistrationForm, LoginForm, FarmingInfoForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
+from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
 from main.models import BlogPost, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
@@ -187,6 +187,7 @@ def reset_token(token):
 
 @app.route('/dashboard')
 def weatherinfo():
+    active_page = 'weatherinfo'
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -220,8 +221,8 @@ def weatherinfo():
     else:
         soil_data = response.json()
         #print(soil_data )
-
-    return render_template('weather.html', weather_data=weather_data, soil_data=soil_data)
+    
+    return render_template('weather.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
 
 @app.route("/blogpost", methods=['GET', 'POST'])
 @login_required
@@ -243,6 +244,18 @@ def viewposts():
     blogpost = BlogPost.query.all()
     
     return render_template('viewposts.html', blogpost=blogpost)
+
+@app.route('/marketplace')
+def marketplace():
+    return render_template('marketplace.html')
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 
 
@@ -268,8 +281,6 @@ def dalle_image(prompt, size):
     data = {
         "prompt": prompt,
         "size": size,
-        # Fill in this line, (prompt)
-        # Fill in this line, (size)
         'response_format': 'b64_json',
     }
 
@@ -287,6 +298,7 @@ def dalle_image(prompt, size):
     return image
 
 '''Image Model with Stable Diffusion'''
+
 def stablediffusion_image(hf_api_key, text):
     url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
     headers = {"Authorization": f"Bearer {hf_api_key}"}
@@ -309,7 +321,7 @@ def stablediffusion_image(hf_api_key, text):
 chat_log = []
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
-    
+    active_page = 'farminginfo'
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -344,9 +356,9 @@ def farminginfo():
         soil_data = response.json()
         #print(soil_data )
     
-    form = FarmingInfoForm()
+    #form = FarmingInfoForm()
 
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST':
         # Create a message for the GPT-4 model
         user_message = f"based on this weather data: {weather_data} and this soil information:{soil_data}, suggest four crops to plant that will grow well with such weather conditions and soil information."
         #user_message = f"name one crop"
@@ -367,31 +379,87 @@ def farminginfo():
         chat_log.append({"role": "assistant", "content": assistant_response})
         #chat_log.append(assistant_response)
         
-        first_crop = f"give only the names of the first four crop suggestion, names only: {assistant_response}"
+        first_crop = f"give only the name of the first crop suggested, name only: {assistant_response}"
         response2 = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=chat_log + [{"role": "user", "content": first_crop}]
         )
-        crops = response2['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": crops})
-        #chat_log.append(firstt_crop)
+        first_crop = response2['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": assistant_response})
         
+        second_crop = f"give only the name of the second crop suggested, name only: {assistant_response}"
+        response3 = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=chat_log + [{"role": "user", "content": second_crop}]
+        )
+        second_crop = response3['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": assistant_response})
+
+     
+        third_crop = f"give only the name of the third crop suggested, name only: {assistant_response}"
+        response4 = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=chat_log + [{"role": "user", "content": third_crop}]
+        )
+        third_crop = response4['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": assistant_response})
+  
         
+        fourth_crop = f"give only the name of the fourth crop suggested, name only: {assistant_response}"
+        response5 = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=chat_log + [{"role": "user", "content": fourth_crop}]
+        )
+        fourth_crop = response5['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": assistant_response})
+     
+
         image_data = None
-        prompt = f"generate four seperate different realistic seed images of each of the crops in: {crops}"
-        size = "512x512"
+        prompt = f"{first_crop} seeds"
+        size = "256x256"
         image = dalle_image(prompt, size)
-        
+
         # Convert the image to bytes and encode it in base64
         buffered = io.BytesIO()
         image.save(buffered, format="PNG")
         image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
+        image2_data = None
+        prompt = f"{second_crop} seeds"
+        size = "256x256"
+        image2 = dalle_image(prompt, size)
+
+        # Convert the image to bytes and encode it in base64
+        buffered = io.BytesIO()
+        image2.save(buffered, format="PNG")
+        image2_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        image3_data = None
+        prompt = f"{third_crop}"
+        size = "256x256"
+        image3 = dalle_image(prompt, size)
+
+        # Convert the image to bytes and encode it in base64
+        buffered = io.BytesIO()
+        image3.save(buffered, format="PNG")
+        image3_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        image4_data = None
+        prompt = f"{fourth_crop} seeds"
+        size = "256x256"
+        image4 = dalle_image(prompt, size)
+
+        # Convert the image to bytes and encode it in base64
+        buffered = io.BytesIO()
+        image4.save(buffered, format="PNG")
+        image4_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+
         # Render the 'gpt.html' template with the form and response
-        return render_template('farminginfo.html', title='farminginfo', form=form, assistant_response=assistant_response,firstt_crop=crops, image_data=image_data)
+        return render_template('farminginfo.html', title='farminginfo', assistant_response=assistant_response,first_crop=first_crop, image_data=image_data, second_crop=second_crop, image2_data=image2_data,  third_crop=third_crop, image3_data=image3_data,  fourth_crop=fourth_crop, image4_data=image4_data)
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
-    return render_template('farminginfo.html', title='farminginfo', form=form)
+    return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
 
 '''Pest Control Suggestion Model'''
 
