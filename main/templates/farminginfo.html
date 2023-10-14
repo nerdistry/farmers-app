@@ -1,32 +1,23 @@
 {% extends "dashboard.html" %}
 {% block content %}
-<form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.q1.label }} <br>
-    {{ form.q1 }} <br><br>
+<section class="main">
+<div class="main-top">
+    <p>MAKE THE WORLD A BETTER PLACE!</p>
+</div>
+<form method="POST">  
 
-    {{ form.q2.label }} <br>
-    {{ form.q2 }} <br><br>
 
-    {{ form.q3.label }} <br>
-    {{ form.q3 }} <br><br>
-
-    {{ form.q4.label }} <br>
-    {{ form.q4 }} <br><br>
-
-    {{ form.q5.label }} <br>
-    {{ form.q5 }} <br><br>
-
-    {{ form.q6.label }} <br>
-    {{ form.q6 }} <br><br>
 
     <button type="submit">Submit</button><br><br>
 
     <div>
         <h2>Response</h2>
         <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
-        <textarea id="response2" name="first_crop" rows="10" style="width: 80%;" readonly>{{ firstt_crop }}</textarea><br>
+        <textarea id="response2" name="first_crop" rows="10" style="width: 80%;" readonly>{{ third_crop }}</textarea><br>
         <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
+        <img src="data:image/png;base64,{{ image2_data }}" alt="Generated Image"> <br>
+        <img src="data:image/png;base64,{{ image3_data }}" alt="Generated Image">
+        <img src="data:image/png;base64,{{ image4_data }}" alt="Generated Image">
         <br><br>
     </div>
 </form>
@@ -69,4 +60,5 @@
         }
     });
 </script>
+</section>
 {% endblock content %}
