@@ -298,7 +298,7 @@ def dalle_image(prompt, size):
     return image
 
 '''Image Model with Stable Diffusion'''
-'''
+
 def stablediffusion_image(hf_api_key, text):
     url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
     headers = {"Authorization": f"Bearer {hf_api_key}"}
@@ -316,42 +316,6 @@ def stablediffusion_image(hf_api_key, text):
         print("Error occurred:", e)
 
     return None
-'''
-
-def stablediffusion_image(hf_api_key, text):
-    url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
-    headers = {"Authorization": f"Bearer {hf_api_key}"}
-
-    data = {"inputs": text}
-
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()
-
-        # Check if the response contains image data
-        if 'image' in response.headers.get('Content-Type', '').lower():
-            # Get the image bytes
-            image_bytes = response.content
-
-            # Open the image using PIL
-            image = Image.open(io.BytesIO(image_bytes))
-
-            # Resize the image to 256x256
-            image = image.resize((256, 256))
-
-            # Save the resized image as bytes
-            output_buffer = io.BytesIO()
-            image.save(output_buffer, format="PNG")
-            resized_image_bytes = output_buffer.getvalue()
-
-            # Return the resized image data
-            return resized_image_bytes
-
-    except Exception as e:
-        print("Error occurred:", e)
-
-    return None
-
 
 '''ChatCompletion Model'''
 chat_log = []
