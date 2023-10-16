@@ -360,7 +360,7 @@ def farminginfo():
 
     if request.method == 'POST':
         # Create a message for the GPT-4 model
-        user_message = f"based on this weather data: {weather_data} and this soil information:{soil_data}, suggest four crops to plant that will grow well with such weather conditions and soil information."
+        user_message = f"Based on the provided weather data, {weather_data}, along with the accompanying soil data, {soil_data}, encompassing details such as soil type, pH levels, and nutrient content, please suggest four suitable crop options for cultivation. give one reason why each of these crops is well-suited for the given weather conditions and soil properties. Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests."
         #user_message = f"name one crop"
         # Append the user's message to the chat log
         chat_log.append({"role": "user", "content": user_message})
@@ -369,7 +369,8 @@ def farminginfo():
         # Send the message to the GPT-4 model
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=chat_log
+            messages=chat_log,
+            max_tokens = 3500
         )
 
         # Extract the assistant's response
@@ -415,7 +416,12 @@ def farminginfo():
      
 
         image_data = None
-        prompt = f"{first_crop} seeds"
+        prompt = (
+            f"Produce an image displaying {first_crop} seeds set against a pastel off-white background (#F4F4F4). "
+            f"The seeds should be represented in their most realistic and detailed form, showcasing their inherent color and texture. "
+            f"Ensure the depiction is comparable to a high-quality still life photograph, emphasizing clarity and minimalism. ")
+
+
         size = "256x256"
         image = dalle_image(prompt, size)
 
@@ -425,7 +431,10 @@ def farminginfo():
         image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
         image2_data = None
-        prompt = f"{second_crop} seeds"
+        prompt = (f"Craft a detailed, high-resolution image of {second_crop} seeds. "
+                  f"The visual should distinctly highlight the unique attributes and morphology of these seeds. "
+                  f"Present them in a manner that accentuates their relevance and use in agricultural practices.")
+
         size = "256x256"
         image2 = dalle_image(prompt, size)
 
@@ -435,7 +444,10 @@ def farminginfo():
         image2_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
         image3_data = None
-        prompt = f"{third_crop}"
+        prompt = (f"Generate a lifelike image of a fully matured {third_crop} plant. "
+                  f"Zoom into its key botanical features, ensuring clarity and detail. "
+                  f"The portrayal should communicate the plant's importance in the agricultural realm, emphasizing its peak growth characteristics.")
+
         size = "256x256"
         image3 = dalle_image(prompt, size)
 
@@ -445,7 +457,10 @@ def farminginfo():
         image3_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
         image4_data = None
-        prompt = f"{fourth_crop} seeds"
+        prompt = (f"Construct a vivid image that encapsulates the essence of {fourth_crop} seeds. "
+                  f"Showcase each seed's unique traits and typical visual characteristics. "
+                  f"The representation should be clear, detailed, and should resonate with its common appearance in agricultural contexts.")
+
         size = "256x256"
         image4 = dalle_image(prompt, size)
 
@@ -461,32 +476,6 @@ def farminginfo():
     # Render the 'gpt.html' template with the form when the page is initially loaded
     return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
 
-'''Pest Control Suggestion Model'''
-
-@app.route('/get_pest_control', methods=['POST'])
-def get_pest_control_advice():
-    data = request.get_json()
-    assistant_response = data.get('assistantResponse')
-
-    # Initialize chat log with the assistant's response and a question about pests
-    chat_log = [{"role": "user", "content": assistant_response},
-                {"role": "assistant", "content": "for each one of the crops, what pests affect them and suggest two ways to protect ech of those crops?"}]
-
-    try:
-        # Send the chat log to the GPT-3.5-turbo model
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log,
-        )
-
-        # Extract the assistant's response from the model's output
-        assistant_response = response['choices'][0]['message']['content']
-
-        return jsonify({"pestControlAdvice": assistant_response})
-
-    except Exception as e:
-        # Handle errors appropriately
-        return jsonify({"error": str(e)})
 
 
 '''TESTING THE APIs'''
