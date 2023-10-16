@@ -13,21 +13,11 @@
     <div>
         <h2>Response</h2>
         <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
-        <textarea id="response2" name="first_crop" rows="10" style="width: 80%;" readonly>{{ third_crop }}</textarea><br>
         <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
         <img src="data:image/png;base64,{{ image2_data }}" alt="Generated Image"> <br>
         <img src="data:image/png;base64,{{ image3_data }}" alt="Generated Image">
         <img src="data:image/png;base64,{{ image4_data }}" alt="Generated Image">
         <br><br>
-    </div>
-</form>
-
-<!-- Add a new form for pest control advice -->
-<form method="POST">
-    <button id="pest-control-button" type="button">Get Pest Control Advice</button>
-    <div>
-        <h2>Pest Control Advice</h2>
-        <textarea id="pest-control-advice" rows="10" style="width: 80%;" readonly></textarea>
     </div>
 </form>
 
