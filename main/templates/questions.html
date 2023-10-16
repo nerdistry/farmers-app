@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Questions</h1>
+<form method="post">
+    <input type="text" name="user_question" placeholder="Ask a question">
+    <input type="submit" value="Submit"><br><br>
+    <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
+</form>
+{% endblock content %}

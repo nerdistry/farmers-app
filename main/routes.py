@@ -509,3 +509,21 @@ def huggingface():
     return render_template('huggingface.html', image_data=Markup(image_data))
 
 
+chat_log = []
+
+@app.route('/questions', methods=['GET', 'POST'])
+def questions():
+    if request.method == 'POST':
+        user_message = request.form['user_question']
+        chat_log.append({"role": "user", "content": user_message})
+
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=chat_log,
+            max_tokens=150
+        )
+
+        assistant_response = response['choices'][0]['message']['content']
+        chat_log.append({"role": "assistant", "content": assistant_response})
+
+    return render_template('questions.html', chat_log=chat_log)
