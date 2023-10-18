@@ -421,57 +421,52 @@ def farminginfo():
             f"The seeds should be represented in their most realistic and detailed form, showcasing their inherent color and texture. "
             f"Ensure the depiction is comparable to a high-quality still life photograph, emphasizing clarity and minimalism. ")
 
+        if request.method == 'POST':
+            image_bytes = stablediffusion_image(hf_api_key, prompt)
 
-        size = "256x256"
-        image = dalle_image(prompt, size)
-
-        # Convert the image to bytes and encode it in base64
-        buffered = io.BytesIO()
-        image.save(buffered, format="PNG")
-        image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        if image_bytes:
+            # Convert the image bytes to base64
+            image_data = base64.b64encode(image_bytes).decode('utf-8')
 
         image2_data = None
         prompt = (f"Craft a detailed, high-resolution image of {second_crop} seeds. "
                   f"The visual should distinctly highlight the unique attributes and morphology of these seeds. "
                   f"Present them in a manner that accentuates their relevance and use in agricultural practices.")
 
-        size = "256x256"
-        image2 = dalle_image(prompt, size)
+        if request.method == 'POST':
+            image2_bytes = stablediffusion_image(hf_api_key, prompt)
 
-        # Convert the image to bytes and encode it in base64
-        buffered = io.BytesIO()
-        image2.save(buffered, format="PNG")
-        image2_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        if image2_bytes:
+            # Convert the image bytes to base64
+            image2_data = base64.b64encode(image_bytes).decode('utf-8')
 
         image3_data = None
         prompt = (f"Generate a lifelike image of a fully matured {third_crop} plant. "
                   f"Zoom into its key botanical features, ensuring clarity and detail. "
                   f"The portrayal should communicate the plant's importance in the agricultural realm, emphasizing its peak growth characteristics.")
 
-        size = "256x256"
-        image3 = dalle_image(prompt, size)
+        if request.method == 'POST':
+            image3_bytes = stablediffusion_image(hf_api_key, prompt)
 
-        # Convert the image to bytes and encode it in base64
-        buffered = io.BytesIO()
-        image3.save(buffered, format="PNG")
-        image3_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        if image3_bytes:
+            # Convert the image bytes to base64
+            image3_data = base64.b64encode(image_bytes).decode('utf-8')
 
         image4_data = None
         prompt = (f"Construct a vivid image that encapsulates the essence of {fourth_crop} seeds. "
                   f"Showcase each seed's unique traits and typical visual characteristics. "
                   f"The representation should be clear, detailed, and should resonate with its common appearance in agricultural contexts.")
 
-        size = "256x256"
-        image4 = dalle_image(prompt, size)
+        if request.method == 'POST':
+            image4_bytes = stablediffusion_image(hf_api_key, prompt)
 
-        # Convert the image to bytes and encode it in base64
-        buffered = io.BytesIO()
-        image4.save(buffered, format="PNG")
-        image4_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        if image4_bytes:
+            # Convert the image bytes to base64
+            image4_data = base64.b64encode(image_bytes).decode('utf-8')
 
 
         # Render the 'gpt.html' template with the form and response
-        return render_template('farminginfo.html', title='farminginfo', assistant_response=assistant_response,first_crop=first_crop, image_data=image_data, second_crop=second_crop, image2_data=image2_data,  third_crop=third_crop, image3_data=image3_data,  fourth_crop=fourth_crop, image4_data=image4_data)
+        return render_template('farminginfo.html', title='farminginfo', assistant_response=assistant_response,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
     return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
