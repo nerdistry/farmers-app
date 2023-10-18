@@ -75,6 +75,7 @@ a.article-title:hover {
 body, h1, h2, p, ul, li {
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 /* Style for the navbar */
@@ -205,7 +206,7 @@ body, h1, h2, p, ul, li {
       }
 
 .section1 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)), url('bg.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)), url('pictures/bg.jpg');
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -306,14 +307,14 @@ body, h1, h2, p, ul, li {
 }
 
 .content3-left {
-  width: 50%;
+  width: 70%;
   padding: 20px;
   padding-left: 15%;
 
 }
 
 .content3-right {
-  width: 70%;
+  width: 80%;
   text-align: center;
 }
 
@@ -329,6 +330,11 @@ body, h1, h2, p, ul, li {
   font-weight: 400;
   line-height: 22.40px;
   word-wrap: break-word;
+}
+.button1:hover{
+  background-color: #4E944F;
+  cursor: pointer;
+  color: white;
 }
 
 .button2{
@@ -359,18 +365,17 @@ body, h1, h2, p, ul, li {
 }
 
 .content4-left {
-  width: 68%;
+  width: 55%;
   text-align: center;
+  
 }
 
 .content4-right {
-  width: 52%;
+  width: 65%;
   padding: 20px;
-  padding-right: 15%;
+  text-align: center;
 }
-.content4subdiv{
-  padding-left: 40%;
-}
+
 
 
 
@@ -554,4 +559,54 @@ img {
 .qr-code {
   width: 60%;  
   margin-top: 10px;
+}
+
+
+
+.top{
+  background-image: url('pictures/top.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 15%;
+  position: relative;
+}
+.h1, .h4{
+  color: white;
+}
+.h4{
+  padding: 3.5rem;
+  margin-left: 3rem;
+}
+.h1{
+  padding: 1.5rem;
+  margin-left: 5.5rem;
+}
+.image-container {
+  display: flex; 
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  top: 30rem;
+  z-index: 2;
+}
+
+.image-container img {
+  width: 120%;
+  height: 27rem; 
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  transition: transform 0.3s;
+}
+
+.image-container img:hover{
+  transform: scale(1.05);
+  cursor: pointer;
+}
+a {
+  text-decoration: none;
+}
+a:hover{
+  cursor: auto;
 }

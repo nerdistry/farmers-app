@@ -1,54 +1,37 @@
-{% extends "dashboard.html" %}
+{% extends "layout.html" %}
 {% block content %}
-<section class="main">
-<div class="main-top">
-    <p>MAKE THE WORLD A BETTER PLACE!</p>
-</div>
-<form method="POST">  
 
 
-
-    <button type="submit">Submit</button><br><br>
-
-    <div>
-        <h2>Response</h2>
-        <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
-        <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
-        <img src="data:image/png;base64,{{ image2_data }}" alt="Generated Image"> <br>
-        <img src="data:image/png;base64,{{ image3_data }}" alt="Generated Image">
-        <img src="data:image/png;base64,{{ image4_data }}" alt="Generated Image">
-        <br><br>
+<div class="container-fluid">
+    <h1 class="mt-5">MAKE THE WORLD A BETTER PLACE!</h1>
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-12 mb-4">
+            <div class="content-section " >
+                <form method="POST" action="">
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <button class="button1" type="submit">Submit</button><br><br>
+                            </div>
+                            <div>
+                                <h2 class="mt-5">Response</h2>
+                                <textarea id="response" name="assistant_response" rows="10" style="width: 80%;" readonly>{{ assistant_response }}</textarea><br>
+                                <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image">
+                                <img src="data:image/png;base64,{{ image2_data }}" alt="Generated Image"> <br>
+                                <img src="data:image/png;base64,{{ image3_data }}" alt="Generated Image">
+                                <img src="data:image/png;base64,{{ image4_data }}" alt="Generated Image">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
-</form>
+</div> 
 
 <script>
     const form = document.querySelector('form');
     const chatBox = document.getElementById('response');
-    const pestControlButton = document.getElementById('pest-control-button');
-    const pestControlAdviceBox = document.getElementById('pest-control-advice');
-
-    // Event listener for the pest control button
-    pestControlButton.addEventListener('click', async () => {
-        const cropSuggestions = chatBox.value; // Retrieve the crop suggestions from the response textarea
-
-        // Send the crop suggestions to the server to get pest control advice
-        const response = await fetch('/get_pest_control', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ assistantResponse: cropSuggestions }), // Send the assistant's response
-        });
-
-        if (response.ok) {
-            const { pestControlAdvice } = await response.json();
-            
-            // Display the pest control advice in the new textarea
-            pestControlAdviceBox.value = pestControlAdvice;
-        } else {
-            alert('Error: Unable to get pest control advice.');
-        }
-    });
 </script>
 </section>
 {% endblock content %}

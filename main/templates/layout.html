@@ -8,7 +8,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    
 
     {% if title %}
         <title>AgriSense - {{ title }}</title>
@@ -22,8 +21,8 @@
               <div class="dropdownn">
                 <button class="dropbtnn">Dropdown</button>
                 <div class="dropdownn-contentt">
-                  <a class="" href="{{ url_for('home') }}">Advisor</a>
-                  <a class="" href="{{ url_for('about') }}">Agritrends</a>
+                  <a class="" href="{{ url_for('questions') }}">Advisor</a>
+                  <a class="" href="{{ url_for('agritrends') }}">Agritrends</a>
                   <a class="" href="{{ url_for('blogpost') }}">Store</a>
                   <a class="" href="{{ url_for('viewposts') }}">Community</a>
                 </div>
@@ -44,14 +43,14 @@
                 </div>
 
                 <div class="whatsapp-icon" onclick="showPopup()">
-                  <img src="{{ url_for('static', filename='icons8-whatsapp(normal).svg') }}" alt="WhatsApp">
+                  <img src="{{ url_for('static', filename='pictures/icons8-whatsapp(normal).svg') }}" alt="WhatsApp">
               </div>
               
               <div class="popup" id="popup">
                   <div class="popup-content">
                       <span class="close" onclick="closePopup()">&times;</span>
                       <h2>Scan to chat with AgriSense</h2>
-                      <img class="qr-code"src="{{ url_for('static', filename='qr-code.png') }}" alt="QR Code">
+                      <img class="qr-code"src="{{ url_for('static', filename='pictures/qr-code.png') }}" alt="QR Code">
                   </div>
               </div>
               
@@ -86,26 +85,6 @@
         </div>
       </div>
     </main>
-
-    <section class="content7">
-      <div class="content7-left">
-          <div>
-              <h4>AGRISENSE</h4><br><br>
-          </div>
-          
-      </div>
-      <div class="content1-right">
-          <div>
-              <h4>SUBSCRIBE</h4><br>
-              <p>Sign up to recieve Agrisense news and updates.</p><br>
-              <p>Email:</p>
-              <div style="border: 2px solid black; border-radius: 12px; display: inline-block; padding: 5px;">
-                  <input type="text" style="border: none; padding: 5px; border-radius: 12px;" placeholder="Type Email" />
-                  <input type="submit" style="background-color: black; color: white; border: none; border-radius: 12px; padding: 5px 10px;" value="Submit" />
-              </div>
-          </div> 
-      </div>
-  </section>
 
 
   

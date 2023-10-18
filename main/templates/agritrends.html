@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="top">
+      <a href="#"><h4 class="h4">AGRISENSE</h4></a>
+      <h1 class="h1">Farming with Artificial Intelligence</h1>
+    </div>
+    <div class="image-container">
+      <a href="">
+        <img src="{{ url_for('static', filename='pictures/weather.jpeg') }}" alt="weather image" />
+      </a>
+      <a href="">
+        <img src="{{ url_for('static', filename='pictures/soil.jpeg') }}" alt="soil image" />
+      </a>
+      <a href="{{ url_for('farminginfo') }}">
+        <img src="{{ url_for('static', filename='pictures/grow.jpeg') }}" alt="grow image" />
+      </a>
+    </div>
+{% endblock content %}
