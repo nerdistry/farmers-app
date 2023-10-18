@@ -5,10 +5,10 @@
       <h1 class="h1">Farming with Artificial Intelligence</h1>
     </div>
     <div class="image-container">
-      <a href="">
+      <a href="{{ url_for('weather') }}">
         <img src="{{ url_for('static', filename='pictures/weather.jpeg') }}" alt="weather image" />
       </a>
-      <a href="">
+      <a href="{{ url_for('soil') }}">
         <img src="{{ url_for('static', filename='pictures/soil.jpeg') }}" alt="soil image" />
       </a>
       <a href="{{ url_for('farminginfo') }}">
