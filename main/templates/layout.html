@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
     {% if title %}
@@ -17,46 +16,62 @@
     {% endif %}
 </head>
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="/">AgriSense</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
+    <div class="navbarr">
             {% if current_user.is_authenticated %}
-              <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
-                <a class="nav-item nav-link" href="{{ url_for('blogpost') }}">Create Posts</a>
-                <a class="nav-item nav-link" href="{{ url_for('viewposts') }}">Community</a>
-                <a class="nav-item nav-link" href="{{ url_for('weatherinfo') }}">Dashboard</a>
-                <a class="nav-item nav-link" href="{{ url_for('questions') }}">Questions</a>
+              <div class="dropdownn">
+                <button class="dropbtnn">Dropdown</button>
+                <div class="dropdownn-contentt">
+                  <a class="" href="{{ url_for('questions') }}">Advisor</a>
+                  <a class="" href="{{ url_for('agritrends') }}">Agritrends</a>
+                  <a class="" href="{{ url_for('blogpost') }}">Store</a>
+                  <a class="" href="{{ url_for('viewposts') }}">Community</a>
+                </div>
               </div>
-              <!-- Navbar Right Side -->
-              <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('weatherinfo') }}">Farming </a>
-                <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
-                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('home') }}">Contact</a>
+
+                <div class="dropdownn2">
+                  <button class="dropbtnn">Profile</button>
+                  <div class="dropdownn-contentt">
+                    <a class="" href="{{ url_for('account') }}">Account</a>
+                    <a class="" href="{{ url_for('blogpost') }}">Create Post</a>
+                    <a class="" href="{{ url_for('account') }}">Settings</a>
+                    <a class="" href="{{ url_for('logout') }}">Logout</a>
+                  </div>
+                </div>
+
+                <div class="whatsapp-icon" onclick="showPopup()">
+                  <img src="{{ url_for('static', filename='pictures/icons8-whatsapp(normal).svg') }}" alt="WhatsApp">
               </div>
+              
+              <div class="popup" id="popup">
+                  <div class="popup-content">
+                      <span class="close" onclick="closePopup()">&times;</span>
+                      <h2>Scan to chat with AgriSense</h2>
+                      <img class="qr-code"src="{{ url_for('static', filename='pictures/qr-code.png') }}" alt="QR Code">
+                  </div>
+              </div>
+              
+              <script src="{{ url_for('static', filename='script2.js') }}"></script>
             {% else %}
-              <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              <a href="{{ url_for('home') }}">Home</a>
+              <a href="{{ url_for('about') }}">About</a>
+              <a href="{{ url_for('home') }}">Contact</a>
+
+              <div class="dropdownn2">
+                <button class="dropbtnn">Profile</button>
+                <div class="dropdownn-contentt">
+                  <a class="" href="{{ url_for('login') }}">Login</a>
+                  <a class="" href="{{ url_for('register') }}">Sign-Up</a>
+                </div>
               </div>
-              <!-- Navbar Right Side -->
-              <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
-            {% endif %}  
-          </div>
-        </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
+            {% endif %}
+    </div>
+    <main role="" class="">
+      <div class="">
+        <div class="">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -70,6 +85,9 @@
         </div>
       </div>
     </main>
+
+
+  
 
 
     <!-- Optional JavaScript -->
