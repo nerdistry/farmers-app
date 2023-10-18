@@ -370,7 +370,7 @@ def farminginfo():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=chat_log,
-            max_tokens = 3500
+            max_tokens = 4000
         )
 
         # Extract the assistant's response
@@ -515,10 +515,15 @@ def questions():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=chat_log,
-            max_tokens=150
+            max_tokens=3500
         )
 
         assistant_response = response['choices'][0]['message']['content']
         chat_log.append({"role": "assistant", "content": assistant_response})
 
     return render_template('questions.html', chat_log=chat_log)
+
+
+@app.route('/agritrends')
+def agritrends():
+    return render_template('agritrends.html')

@@ -1,15 +1,147 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
+<section class="section1">
+  <div class="logo">AGRISENSE</div>
+  <div class="content">
+      <div class="future">THE FUTURE OF<br>AGRICULTURE</div>
+      <div class="precision">Precision Farming with AI-Powered Crop<br>Recommendations</div>
+  </div>
+</section>
+
+
+<section class="content1">
+  <div class="content1-left">
+      <div class="borderline">
+          <h4>VISION</h4>
+          <div class="text1">We Are <br>
+              Revolutionizing<br>
+              Farming<br><br>
           </div>
-        </article>
-    {% endfor %}
+          <p class="text2">To empower farmers across Africa<br> with a cutting-edge agricultural<br> 
+              platform that harnesses the power of<br> AI and data to enable sustainable,<br>
+              climate-resilient farming.
+          </p>
+      </div>
+      
+  </div>
+  <div class="content1-right">
+      <img src="{{ url_for('static', filename='pictures/image1.png') }}" alt="Image Description" class="rounded-image">
+  </div>
+</section>
+
+<section class="content2">
+  <div class="content2-left">
+      <div class="borderline">
+          <h4>SERVICES</h4><br>
+          <div class="text1">
+              We Deliver Exceptional<br>
+              Products and Services<br>
+              Around the World
+          </div>
+      </div>
+  </div>
+</section>
+
+
+<section class="content3">
+  <div class="content3-left">
+      <h2 class="text3">TAILORED<br>
+      RECOMMENDATIONS</h2><br>
+      <div class="text2">Generating crop recommendations <br>
+          based on user inputs while also<br>
+          considering seasonal demand, historical<br>
+          yield data, and logical agricultural<br>
+          practices<br><br>
+          <button type="button" class="button1">Get Started</button>
+      </div>
+      
+  </div>
+  <div class="content3-right">
+      <img src="{{ url_for('static', filename='pictures/image2.jpg') }}" alt="Image Description" class="rounded-image">
+  </div>
+</section>
+
+
+<section class="content4">
+  <div class="content4-left">
+      <img src="{{ url_for('static', filename='pictures/image3.jpg') }}" alt="Image Description" class="rounded-image">
+  </div>
+  <div class="content4-right">
+      <div class="content4subdiv">
+          <h2 class="text3">REAL-TIME<br>
+              INFORMATION</h2><br><br>
+          <div class="text2">
+              Our Solution collects the user's real <br>
+              time information according to their<br>
+              location such as the weather statistics,<br>
+              soil and agronomic data and uses it to<br>
+              generate concise recommendations<br><br>
+              <button href="{{ url_for('agritrends') }}" type="button" class="button1">Get Started</button>
+          </div>
+      </div>
+      
+  </div>
+</section>
+
+
+<section class="content5">
+  <div class="content5-left">
+      <h2 class="text3">PEST AND DISEASE <br>
+      CONTROL</h2><br>
+      <div class="text2">Our innovative solution incorporates<br>
+          intelligent pest and disease control<br>
+          strategies. The platform offers proactive<br>
+          recommendations for pest<br>
+          management techniques and disease<br>
+          control, hence promoting long-term<br>
+          crop health.<br><br><br>
+          <button type="button" class="button1">Get Started</button>
+      </div>
+      
+  </div>
+  <div class="content5-right">
+      <img src="{{ url_for('static', filename='pictures/image4.jpg') }}" alt="Image Description" class="rounded-image">
+  </div>
+</section>
+
+<section class="content6">
+  <div class="content6-left">
+      <div class="borderline2">
+          <p class="whyagrisense">WHY AGRISENSE<p><br><br>
+          <h2 class="different">A different approach,<br>
+              using a new method of<br>
+              communication.</h2><br><br><br><br><br>
+
+          <div class="ending">
+              Users can get insights and <br>
+          recommendations at the comfort of <br>
+          their phones, the solution innovatively<br>
+          uses Whatsapp Chatbot technology to<br>
+          meet the user's needs.<br><br><br>
+          <a href="{{ url_for('agritrends') }}"><button type="button" class="button2">Get Started</button></a>
+          </div>
+      </div>
+      
+  </div>
+</section>
+
+<section class="content7">
+  <div class="content7-left">
+      <div>
+          <h4>AGRISENSE</h4><br><br>
+      </div>
+      
+  </div>
+  <div class="content1-right">
+      <div>
+          <h4>SUBSCRIBE</h4><br>
+          <p>Sign up to recieve Agrisense news and updates.</p><br>
+          <p>Email:</p>
+          <div style="border: 2px solid black; border-radius: 12px; display: inline-block; padding: 5px;">
+              <input type="text" style="border: none; padding: 5px; border-radius: 12px;" placeholder="Type Email" />
+              <input type="submit" style="background-color: black; color: white; border: none; border-radius: 12px; padding: 5px 10px;" value="Submit" />
+          </div>
+      </div> 
+  </div>
+</section>
 {% endblock content %}
