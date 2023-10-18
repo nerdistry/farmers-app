@@ -4,9 +4,13 @@
   <div class="row mt-5 justify-content-center">
     <div class="col-md-12 mb-4">
       <div class="content-section">
-        <form method="POST" action="{{ url_for('farmingexpert') }}">
-          <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Chat with a Farming Expert</legend>
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">
+            Your Conversation with our Farming Expert
+          </legend>
+          <p><strong>You: </strong>{{ user_message }}</p>
+          <p><strong>Farming Expert: </strong>{{ assistant_response }}</p>
+          <form method="POST" action="{{ url_for('farmingexpert') }}">
             <div class="form-group">
               <div class="form-group">
                 <input
@@ -22,8 +26,8 @@
                 /><br /><br />
               </div>
             </div>
-          </fieldset>
-        </form>
+          </form>
+        </fieldset>
       </div>
     </div>
   </div>

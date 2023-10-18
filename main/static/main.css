@@ -1,13 +1,12 @@
-
 .site-header {
   color: #cbd5db;
 }
 
-.site-header{
+.site-header {
   color: #ffffff;
 }
 
-.site-header{
+.site-header {
   font-weight: 500;
 }
 
@@ -41,7 +40,7 @@ a.article-title:hover {
 .article-metadata {
   padding-bottom: 1px;
   margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
+  border-bottom: 1px solid #e3e3e3;
 }
 
 .article-metadata a:hover {
@@ -66,155 +65,153 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
-.list-group{
-  background: #B0D9B1;
+.list-group {
+  background: #b0d9b1;
 }
 
-
-
-body, h1, h2, p, ul, li {
+body,
+h1,
+h2,
+p,
+ul,
+li {
   margin: 0;
   padding: 0;
   position: relative;
 }
 
 /* Style for the navbar */
-      .navbarr {
-          background-color: #333;
-          overflow: hidden;
-      }
+.navbarr {
+  background-color: #333;
+  overflow: hidden;
+}
 
-      /* Style for the navbar links */
-      .navbarr a{
-          float: left;
-          font-size: 16px;
-          color: white;
-          text-align: center;
-          padding: 14px 16px;
-          text-decoration: none;
-      }
+/* Style for the navbar links */
+.navbarr a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.navbarr a:hover{
+  cursor: pointer;
+  background-color: #706969;
+}
 
-      /* Style for the dropdown content */
-      .dropdownn {
-          float: left;
-          overflow: hidden;
-      }
-      .dropdownn2 {
-          float: right;
-          overflow: hidden;
-          margin-right: 3%;
-      }
+/* Style for the dropdown content */
+.dropdownn {
+  float: left;
+  overflow: hidden;
+}
+.dropdownn2 {
+  float: right;
+  overflow: hidden;
+  margin-right: 3%;
+}
 
+/* Style for the dropdown button */
+.dropdownn .dropbtnn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+.dropdownn2 .dropbtnn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
 
-      /* Style for the dropdown button */
-      .dropdownn .dropbtnn {
-          font-size: 16px;
-          border: none;
-          outline: none;
-          color: white;
-          padding: 14px 16px;
-          background-color: inherit;
-          font-family: inherit;
-          margin: 0;
-      }
-      .dropdownn2 .dropbtnn {
-          font-size: 16px;
-          border: none;
-          outline: none;
-          color: white;
-          padding: 14px 16px;
-          background-color: inherit;
-          font-family: inherit;
-          margin: 0;
-      }
+/* Style for the dropdown content when hovering over the dropdown button */
+.dropdownn:hover, .dropbtnn:hover {
+  background-color: #555;
+  cursor: pointer;
+}
 
-      /* Style for the dropdown content when hovering over the dropdown button */
-      .dropdownn:hover .dropbtnn {
-          background-color: #555;
-      }
+/* Style for the dropdown menu */
+.dropdownn-contentt {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  min-width: 110px;
+  z-index: 1;
+}
 
-      /* Style for the dropdown menu */
-      .dropdownn-contentt {
-          display: none;
-          position: absolute;
-          background-color: #333;
-          min-width: 160px;
-          z-index: 1;
-      }
+/* Style for the links inside the dropdown menu */
+.dropdownn-contentt a {
+  float: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
 
-      /* Style for the links inside the dropdown menu */
-      .dropdownn-contentt a {
-          float: none;
-          color: white;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-          text-align: left;
-      }
+/* Style for the dropdown links on hover */
+.dropdownn-contentt a:hover {
+  background-color: #555;
+}
 
-      /* Style for the dropdown links on hover */
-      .dropdownn-contentt a:hover {
-          background-color: #555;
-      }
+/* Show the dropdown menu when hovering over the dropdown */
+.dropdownn:hover .dropdownn-contentt {
+  display: block;
+}
 
-      /* Show the dropdown menu when hovering over the dropdown */
-      .dropdownn:hover .dropdownn-contentt {
-          display: block;
-      }
+.dropdownn2:hover .dropbtnn {
+  background-color: #555;
+}
 
-      
+/* Style for the dropdown menu */
+.dropdownn2-contentt {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  min-width: 160px;
+  z-index: 1;
+}
 
+/* Style for the links inside the dropdown menu */
+.dropdownn2-contentt a {
+  float: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
 
+/* Style for the dropdown links on hover */
+.dropdownn2-contentt a:hover {
+  background-color: #555;
+}
 
-
-
-
-
-
-
-      .dropdownn2:hover .dropbtnn {
-          background-color: #555;
-      }
-
-      /* Style for the dropdown menu */
-      .dropdownn2-contentt {
-          display: none;
-          position: absolute;
-          background-color: #333;
-          min-width: 160px;
-          z-index: 1;
-      }
-
-      /* Style for the links inside the dropdown menu */
-      .dropdownn2-contentt a {
-          float: none;
-          color: white;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-          text-align: left;
-      }
-
-      /* Style for the dropdown links on hover */
-      .dropdownn2-contentt a:hover {
-          background-color: #555;
-      }
-
-      /* Show the dropdown menu when hovering over the dropdown */
-      .dropdownn2:hover .dropdownn-contentt {
-          display: block;
-      }
+/* Show the dropdown menu when hovering over the dropdown */
+.dropdownn2:hover .dropdownn-contentt {
+  display: block;
+}
 
 .section1 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)), url('pictures/bg.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("pictures/bg.jpg");
   background-size: cover;
   background-position: center;
   height: 100vh;
   display: flex;
-  
+
   justify-content: center;
   color: #fff;
-  
+
   padding: 20px;
 }
 
@@ -224,15 +221,13 @@ body, h1, h2, p, ul, li {
   font-family: Montserrat;
   font-weight: 700;
   letter-spacing: 7px;
-  word-wrap: break-word
-  
+  word-wrap: break-word;
 }
 
 .content {
   margin: 0 auto;
   width: 50%;
   text-align: center;
-  
 }
 
 .future {
@@ -252,8 +247,8 @@ body, h1, h2, p, ul, li {
   font-size: 22px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 43.20px;
-  letter-spacing: 1.20px;
+  line-height: 43.2px;
+  letter-spacing: 1.2px;
   word-wrap: break-word;
   margin-right: 15%;
 }
@@ -270,11 +265,11 @@ body, h1, h2, p, ul, li {
   padding: 20px;
   padding-left: 15%;
 }
-.borderline{
+.borderline {
   padding: 30px;
   border-left: 2px solid black;
 }
-.borderline2{
+.borderline2 {
   padding: 30px;
   border-left: 2px solid white;
 }
@@ -283,7 +278,6 @@ body, h1, h2, p, ul, li {
   width: 70%;
   text-align: center;
 }
-
 
 .content2 {
   background-color: #fff;
@@ -298,7 +292,6 @@ body, h1, h2, p, ul, li {
   padding-left: 15%;
 }
 
-
 .content3 {
   background-color: #fff;
   display: flex;
@@ -310,7 +303,6 @@ body, h1, h2, p, ul, li {
   width: 70%;
   padding: 20px;
   padding-left: 15%;
-
 }
 
 .content3-right {
@@ -328,32 +320,30 @@ body, h1, h2, p, ul, li {
   font-size: 16px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 22.40px;
+  line-height: 22.4px;
   word-wrap: break-word;
 }
-.button1:hover{
-  background-color: #4E944F;
+.button1:hover {
+  background-color: #4e944f;
   cursor: pointer;
   color: white;
 }
 
-.button2{
+.button2 {
   background-color: black;
   color: white;
   border: 1px solid white;
   padding: 8px;
   border-radius: 12px;
 
-  
   font-size: 16px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 22.40px;
-  word-wrap: break-word
+  line-height: 22.4px;
+  word-wrap: break-word;
 }
 
-
-.rounded-image{
+.rounded-image {
   border-radius: 12px;
 }
 
@@ -367,7 +357,6 @@ body, h1, h2, p, ul, li {
 .content4-left {
   width: 55%;
   text-align: center;
-  
 }
 
 .content4-right {
@@ -375,9 +364,6 @@ body, h1, h2, p, ul, li {
   padding: 20px;
   text-align: center;
 }
-
-
-
 
 .content5 {
   background-color: #fff;
@@ -390,14 +376,12 @@ body, h1, h2, p, ul, li {
   width: 50%;
   padding: 20px;
   padding-left: 16%;
-
 }
 
 .content5-right {
   width: 70%;
   text-align: center;
 }
-
 
 .content6 {
   background-color: #e8e6e6;
@@ -414,7 +398,6 @@ body, h1, h2, p, ul, li {
   margin-left: 13%;
   border-radius: 15px;
 }
-
 
 .content7 {
   background-color: #fff;
@@ -434,35 +417,34 @@ body, h1, h2, p, ul, li {
   text-align: left;
 }
 
-
-.text1{
+.text1 {
   color: black;
   font-size: 24px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 43.20px;
+  line-height: 43.2px;
   letter-spacing: 1.92px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
-.text2{
+.text2 {
   color: black;
   font-size: 16px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 28.80px;
+  line-height: 28.8px;
   letter-spacing: 0.64px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
-.text3{
+.text3 {
   color: black;
   font-size: 40px;
   font-family: Montserrat;
   font-weight: 400;
   line-height: 60px;
-  letter-spacing: 3.20px;
-  word-wrap: break-word
+  letter-spacing: 3.2px;
+  word-wrap: break-word;
 }
-h4{
+h4 {
   color: #000;
   font-family: Montserrat;
   font-size: 14px;
@@ -472,31 +454,31 @@ h4{
   letter-spacing: 2.24px;
 }
 
-.whyagrisense{
+.whyagrisense {
   color: white;
   font-size: 14px;
   font-family: Montserrat;
   font-weight: 400;
   letter-spacing: 2.24px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
-.different{
+.different {
   color: white;
   font-size: 24px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 43.20px;
+  line-height: 43.2px;
   letter-spacing: 1.92px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
-.ending{
+.ending {
   color: white;
   font-size: 16px;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 28.80px;
+  line-height: 28.8px;
   letter-spacing: 0.64px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
 
 img {
@@ -507,23 +489,21 @@ img {
 /* Responsive layout - adjust based on screen size */
 @media (max-width: 768px) {
   .content {
-      flex-direction: column;
+    flex-direction: column;
   }
 
-  .content-left, .content-right {
-      width: 100%;
+  .content-left,
+  .content-right {
+    width: 100%;
   }
 }
-
-
-
 
 .whatsapp-icon img {
   width: 50px;
   cursor: pointer;
-  position: fixed;    
-  bottom: 20px;     
-  right: 20px; 
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 
 .popup {
@@ -557,32 +537,31 @@ img {
 }
 
 .qr-code {
-  width: 60%;  
+  width: 60%;
   margin-top: 10px;
 }
 
-
-
-.top{
-  background-image: url('pictures/top.jpeg');
+.top {
+  background-image: url("pictures/top.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   padding-bottom: 15%;
   position: relative;
 }
-.h1, .h4{
+.h1,
+.h4 {
   color: white;
 }
-.h4{
+.h4 {
   padding: 3.5rem;
   margin-left: 3rem;
 }
-.h1{
+.h1 {
   padding: 1.5rem;
   margin-left: 5.5rem;
 }
 .image-container {
-  display: flex; 
+  display: flex;
   justify-content: space-around;
   position: absolute;
   bottom: 0;
@@ -594,19 +573,19 @@ img {
 
 .image-container img {
   width: 120%;
-  height: 27rem; 
+  height: 27rem;
   border: 1px solid white;
   border-radius: 0.5rem;
   transition: transform 0.3s;
 }
 
-.image-container img:hover{
+.image-container img:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
 a {
   text-decoration: none;
 }
-a:hover{
+a:hover {
   cursor: auto;
 }

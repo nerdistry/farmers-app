@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Weather Information</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
   <h1>Soil Information</h1>
     {% if soil_data %}
         <li><strong>Message:</strong> {{ soil_data.message }}</li>
@@ -37,5 +32,4 @@
         <p>No soil information available.</p>
     {% endif %}
 
-</body>
-</html>
+{% endblock %}

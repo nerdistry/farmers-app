@@ -185,9 +185,8 @@ def reset_token(token):
 
 '''WEATHER AND SOIL APIs'''
 
-@app.route('/dashboard')
-def weatherinfo():
-    active_page = 'weatherinfo'
+@app.route('/weather')
+def weather():
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -222,7 +221,36 @@ def weatherinfo():
         soil_data = response.json()
         #print(soil_data )
     
-    return render_template('weather.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
+    return render_template('weather.html', weather_data=weather_data)
+
+@app.route('/soil')
+def soil():
+    response = requests.get('http://ip-api.com/json/')
+
+    if response.status_code != 200:
+        return 'Could not get location information.'
+
+    location_data = response.json()
+    session['location'] = location_data
+
+    lat = location_data.get('lat')
+    lon = location_data.get('lon')
+
+    #fetching soil data.
+    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
+    headers = {"x-api-key": AMBEEDATA_API_KEY}
+    response = requests.get(soil_url, headers=headers)
+    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+
+    if response.status_code != 200:
+        return 'Could not get soil information.'
+    else:
+        soil_data = response.json()
+        #print(soil_data )
+    
+    return render_template('soil.html', soil_data=soil_data)
+    
 
 @app.route("/blogpost", methods=['GET', 'POST'])
 @login_required
@@ -311,7 +339,20 @@ def stablediffusion_image(hf_api_key, text):
 
         # Check if the response contains image data
         if 'image' in response.headers.get('Content-Type', '').lower():
-            return response.content
+            # Convert the response content to a Pillow image
+            image = Image.open(BytesIO(response.content))
+            
+            # Resize the image to 256x256
+            image = image.resize((256, 256))
+
+            # You can save the resized image to a file if needed
+            # image.save("resized_image.png")
+
+            # Convert the Pillow image back to bytes
+            resized_image_bytes = BytesIO()
+            image.save(resized_image_bytes, format='PNG')
+            return resized_image_bytes.getvalue()
+
     except Exception as e:
         print("Error occurred:", e)
 
@@ -360,7 +401,8 @@ def farminginfo():
 
     if request.method == 'POST':
         # Create a message for the GPT-4 model
-        user_message = f"Based on the provided weather data, {weather_data}, along with the accompanying soil data, {soil_data}, encompassing details such as soil type, pH levels, and nutrient content, please suggest four suitable crop options for cultivation. give one reason why each of these crops is well-suited for the given weather conditions and soil properties. Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests."
+        user_message = f"Based on the provided weather data, {weather_data}, along with the accompanying soil data, {soil_data}, please suggest four suitable crop options for cultivation. give one reason why each of these crops is well-suited for the given weather conditions and soil properties."
+        #Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests.
         #user_message = f"name one crop"
         # Append the user's message to the chat log
         chat_log.append({"role": "user", "content": user_message})
@@ -370,7 +412,7 @@ def farminginfo():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=chat_log,
-            max_tokens = 4000
+            max_tokens = 2000
         )
 
         # Extract the assistant's response
@@ -417,9 +459,7 @@ def farminginfo():
 
         image_data = None
         prompt = (
-            f"Produce an image displaying {first_crop} seeds set against a pastel off-white background (#F4F4F4). "
-            f"The seeds should be represented in their most realistic and detailed form, showcasing their inherent color and texture. "
-            f"Ensure the depiction is comparable to a high-quality still life photograph, emphasizing clarity and minimalism. ")
+            f"Craft a detailed, high-resolution image of {first_crop}")
 
         if request.method == 'POST':
             image_bytes = stablediffusion_image(hf_api_key, prompt)
@@ -429,40 +469,34 @@ def farminginfo():
             image_data = base64.b64encode(image_bytes).decode('utf-8')
 
         image2_data = None
-        prompt = (f"Craft a detailed, high-resolution image of {second_crop} seeds. "
-                  f"The visual should distinctly highlight the unique attributes and morphology of these seeds. "
-                  f"Present them in a manner that accentuates their relevance and use in agricultural practices.")
+        prompt = (f"Craft a detailed, high-resolution image of {second_crop} .")
 
         if request.method == 'POST':
             image2_bytes = stablediffusion_image(hf_api_key, prompt)
 
         if image2_bytes:
             # Convert the image bytes to base64
-            image2_data = base64.b64encode(image_bytes).decode('utf-8')
+            image2_data = base64.b64encode(image2_bytes).decode('utf-8')
 
         image3_data = None
-        prompt = (f"Generate a lifelike image of a fully matured {third_crop} plant. "
-                  f"Zoom into its key botanical features, ensuring clarity and detail. "
-                  f"The portrayal should communicate the plant's importance in the agricultural realm, emphasizing its peak growth characteristics.")
+        prompt = (f"Craft a detailed, high-resolution image of {third_crop} ")
 
         if request.method == 'POST':
             image3_bytes = stablediffusion_image(hf_api_key, prompt)
 
         if image3_bytes:
             # Convert the image bytes to base64
-            image3_data = base64.b64encode(image_bytes).decode('utf-8')
+            image3_data = base64.b64encode(image3_bytes).decode('utf-8')
 
         image4_data = None
-        prompt = (f"Construct a vivid image that encapsulates the essence of {fourth_crop} seeds. "
-                  f"Showcase each seed's unique traits and typical visual characteristics. "
-                  f"The representation should be clear, detailed, and should resonate with its common appearance in agricultural contexts.")
+        prompt = (f"Craft a detailed, high-resolution image of  {fourth_crop} ")
 
         if request.method == 'POST':
             image4_bytes = stablediffusion_image(hf_api_key, prompt)
 
         if image4_bytes:
             # Convert the image bytes to base64
-            image4_data = base64.b64encode(image_bytes).decode('utf-8')
+            image4_data = base64.b64encode(image4_bytes).decode('utf-8')
 
 
         # Render the 'gpt.html' template with the form and response
@@ -503,27 +537,33 @@ def huggingface():
 
     return render_template('huggingface.html', image_data=Markup(image_data))
 
-
-chat_log = []
-
-@app.route('/questions', methods=['GET', 'POST'])
-def questions():
-    if request.method == 'POST':
-        user_message = request.form['user_question']
-        chat_log.append({"role": "user", "content": user_message})
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log,
-            max_tokens=3500
-        )
-
-        assistant_response = response['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
-
-    return render_template('questions.html', chat_log=chat_log)
-
-
 @app.route('/agritrends')
 def agritrends():
     return render_template('agritrends.html')
+
+@app.route('/questions')
+def questions():
+    return render_template('questions.html')
+
+@app.route('/farmingexpert', methods=['GET', 'POST'])
+def farmingexpert():
+    user_message = ""
+    assistant_response=""
+    if request.method == 'POST':
+        user_message = request.form['user_question']
+        prompt = f"User: {user_message}\nFarming Expert: "
+        chat_history = []
+
+        response = openai.Completion.create(
+            model="text-davinci-002",
+            prompt= prompt,
+            temperature=0.5,
+            max_tokens=1000,
+            top_p=1,
+            frequency_penalty=0,
+            stop=["User: ", "\nFarming Expert: "]
+        )
+        assistant_response = response.choices[0].text.strip()
+        chat_history.append(f"User: {user_message}\nFarming Expert: {assistant_response}")
+
+    return render_template('farmingexpert.html', user_message=user_message, assistant_response=assistant_response)
