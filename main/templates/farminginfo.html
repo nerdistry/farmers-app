@@ -24,6 +24,15 @@
                         </div>
                     </fieldset>
                 </form>
+
+                <!-- Add a new form for pest control advice -->
+                <form method="POST">
+                    <button id="pest-control-button" type="button">Get Pest Control Advice</button>
+                    <div>
+                        <h2>Pest Control Advice</h2>
+                        <textarea id="pest-control-advice" rows="10" style="width: 80%;" readonly></textarea>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -32,6 +41,31 @@
 <script>
     const form = document.querySelector('form');
     const chatBox = document.getElementById('response');
+    const pestControlButton = document.getElementById('pest-control-button');
+    const pestControlAdviceBox = document.getElementById('pest-control-advice');
+
+    // Event listener for the pest control button
+    pestControlButton.addEventListener('click', async () => {
+        const cropSuggestions = chatBox.value; // Retrieve the crop suggestions from the response textarea
+
+        // Send the crop suggestions to the server to get pest control advice
+        const response = await fetch('/get_pest_control', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ assistantResponse: cropSuggestions }), // Send the assistant's response
+        });
+
+        if (response.ok) {
+            const { pestControlAdvice } = await response.json();
+            
+            // Display the pest control advice in the new textarea
+            pestControlAdviceBox.value = pestControlAdvice;
+        } else {
+            alert('Error: Unable to get pest control advice.');
+        }
+    });
 </script>
 </section>
 {% endblock content %}
