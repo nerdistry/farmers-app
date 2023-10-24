@@ -14,6 +14,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    farm = db.Column(db.String(3), nullable=False)
+    typeoffarming = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(60), nullable=False)
     blogpost = db.relationship('BlogPost', backref='user', lazy=True)
     confirmed = db.Column(db.Boolean, default=False)
