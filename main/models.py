@@ -55,4 +55,8 @@ class BlogPost(db.Model):
     def __repr__(self):
         return f"Blogpost('{self.title}', '{self.date_posted}')"
 
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(30), nullable=False, unique=True)
     

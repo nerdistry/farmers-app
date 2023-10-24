@@ -9,7 +9,7 @@ from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimed
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
-from main.models import BlogPost, User
+from main.models import BlogPost, Category, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -573,29 +573,6 @@ def agritrends():
 def questions():
     return render_template('questions.html')
 
-@app.route('/farmingexpert', methods=['GET', 'POST'])
-def farmingexpert():
-    user_message = ""
-    assistant_response=""
-    if request.method == 'POST':
-        user_message = request.form['user_question']
-        prompt = f"User: {user_message}\nFarming Expert: "
-        chat_history = []
-
-        response = openai.Completion.create(
-            model="text-davinci-002",
-            prompt= prompt,
-            temperature=0.5,
-            max_tokens=1000,
-            top_p=1,
-            frequency_penalty=0,
-            stop=["User: ", "\nFarming Expert: "]
-        )
-        assistant_response = response.choices[0].text.strip()
-        chat_history.append(f"User: {user_message}\nFarming Expert: {assistant_response}")
-
-    return render_template('farmingexpert.html', user_message=user_message, assistant_response=assistant_response)
-
 
 @app.route("/advisor")
 def advisor():
@@ -608,9 +585,29 @@ def chat():
     return jsonify({"response": response})
 
 def get_Chat_response(text):
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=text,
-        max_tokens=3000,
+    messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
+                {"role": "user", "content": text}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages = messages
     )
-    return response.choices[0].text
+    messages.append(response)
+    return response['choices'][0]['message']['content']
+
+@app.route('/addcategory', methods=['GET','POST'])
+def addcategory():
+    if request.method=="POST":
+        getcategory = request.form.get('category')
+        category = Category(category=getcategory)
+        db.session.add(category)
+        db.session.commit()
+        flash(f'The Category {getcategory} was added', 'success')
+        return redirect(url_for('addcategory'))
+    return render_template('addcategory.html')
+
+
+@app.route("/store")
+def store():
+    products = Addproduct.query.filter(Addproduct.stock > 0)
+    return render_template("store.html", products = products)
+
