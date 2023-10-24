@@ -1,0 +1,50 @@
+.main-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.weather-title {
+  font-size: 36px; /* Increase font size for the title */
+  text-align: center;
+  margin-bottom: 20px; /* Add spacing below the title */
+}
+
+.spacing {
+  height: 20px; /* Create spacing between title and other text */
+}
+
+.weather-card {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.weather-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-icon img {
+  max-width: 80px;
+}
+
+.weather-text ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.weather-text li {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.weather-text li strong {
+  font-weight: bold;
+}
