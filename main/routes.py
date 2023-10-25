@@ -9,7 +9,7 @@ from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimed
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
-from main.models import BlogPost, User
+from main.models import BlogPost, Category, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -42,7 +42,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
 
         # Generate a confirmation token
         token = serializer.dumps(user.email, salt='email-confirm')
@@ -63,7 +63,7 @@ def register():
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try:
-        email = serializer.loads(token, salt='email-confirm', max_age=1800)  # 30 minutes expiration
+        email = serializer.loads(token, salt='email-confirm', max_age=1800)
 
         user = User.query.filter_by(email=email).first()
         if user:
@@ -401,7 +401,9 @@ def farminginfo():
 
     if request.method == 'POST':
         # Create a message for the GPT-4 model
-        user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
+        #user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
+        user_message = f"Based on this: {weather_data}, and: {soil_data}, recommend 4 crops to plant and give reasons why for each."
+        
         #Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests.
         #user_message = f"name one crop"
         # Append the user's message to the chat log
@@ -571,25 +573,41 @@ def agritrends():
 def questions():
     return render_template('questions.html')
 
-@app.route('/farmingexpert', methods=['GET', 'POST'])
-def farmingexpert():
-    user_message = ""
-    assistant_response=""
-    if request.method == 'POST':
-        user_message = request.form['user_question']
-        prompt = f"User: {user_message}\nFarming Expert: "
-        chat_history = []
 
-        response = openai.Completion.create(
-            model="text-davinci-002",
-            prompt= prompt,
-            temperature=0.5,
-            max_tokens=1000,
-            top_p=1,
-            frequency_penalty=0,
-            stop=["User: ", "\nFarming Expert: "]
-        )
-        assistant_response = response.choices[0].text.strip()
-        chat_history.append(f"User: {user_message}\nFarming Expert: {assistant_response}")
+@app.route("/advisor")
+def advisor():
+    return render_template("chat.html")
 
-    return render_template('farmingexpert.html', user_message=user_message, assistant_response=assistant_response)
+@app.route("/get", methods=["POST"])
+def chat():
+    msg = request.form["msg"]
+    response = get_Chat_response(msg)
+    return jsonify({"response": response})
+
+def get_Chat_response(text):
+    messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
+                {"role": "user", "content": text}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages = messages
+    )
+    messages.append(response)
+    return response['choices'][0]['message']['content']
+
+@app.route('/addcategory', methods=['GET','POST'])
+def addcategory():
+    if request.method=="POST":
+        getcategory = request.form.get('category')
+        category = Category(category=getcategory)
+        db.session.add(category)
+        db.session.commit()
+        flash(f'The Category {getcategory} was added', 'success')
+        return redirect(url_for('addcategory'))
+    return render_template('addcategory.html')
+
+
+@app.route("/store")
+def store():
+    products = Addproduct.query.filter(Addproduct.stock > 0)
+    return render_template("store.html", products = products)
+
