@@ -1,29 +1,37 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %}
 {% block content %}
-
-<section class="main">
-  <div class="main-body">
-    <h1>Weather in {{ weather_data.name }}</h1>
-
-    <div class="weather_card">
-      <div class="weather_details">
-        <div class="img">
-          <img src="{{ url_for('static', filename='assets/sun.png') }}" alt="sun picture">
-        </div>
-        <div class="text">
-          <span>
-            <p>Temperature: {{ weather_data.main.temp }}&#8451; (Feels Like: {{ weather_data.main.feels_like }}&#8451;)</p>
-            <p>Weather: {{ weather_data.weather[0].description }} <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon"></p>
-            <p>Wind: {{ weather_data.wind.speed }} mps, Direction: {{ weather_data.wind.deg }}°</p>
-            <p>Pressure: {{ weather_data.main.pressure }} hPa</p>
-            <p>Humidity: {{ weather_data.main.humidity }}%</p>
-            <p>Cloud Coverage: {{ weather_data.clouds.all }}%</p>
-            <p>Visibility: {{ weather_data.visibility }} m</p>
-          </span>
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='weather.css') }}">
+</head>
+<body>
+  <section class="main">
+    <div class="main-body">
+      <div class="centered-text">
+        <h1 class="weather-title">Weather in Nairobi South</h1>
+        <div class="spacing"></div> <!-- Add spacing between title and other text -->
+        <div class="weather-card">
+          <div class="weather-details">
+            <div class="weather-icon">
+              <img src="{{ url_for('static', filename='assets/sun.png') }}" alt="Sun Picture">
+            </div>
+            <div class="weather-text">
+              <ul>
+                <li><strong>Temperature:</strong> {{ weather_data.main.temp }}&#8451; (Feels Like: {{ weather_data.main.feels_like }}&#8451;)</li>
+                <li><strong>Weather:</strong> {{ weather_data.weather[0].description }} <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon"></li>
+                <li><strong>Wind:</strong> {{ weather_data.wind.speed }} m/s, Direction: {{ weather_data.wind.deg }}°</li>
+                <li><strong>Pressure:</strong> {{ weather_data.main.pressure }} hPa</li>
+                <li><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</li>
+                <li><strong>Cloud Coverage:</strong> {{ weather_data.clouds.all }}%</li>
+                <li><strong>Visibility:</strong> {{ weather_data.visibility }} m</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-{% endblock content%}
+  </section>
+</body>
+</html>
+{% endblock content %}

@@ -1,0 +1,44 @@
+.soil-main {
+  margin-top: 60px;
+  padding: 20px;
+  text-align: center;
+}
+
+.soil-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.soil-card {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: inline-block; /* Make the card inline-block */
+  text-align: left; /* Adjust the alignment as needed */
+}
+
+.soil-details {
+  text-align: left;
+}
+
+.soil-text {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.soil-text li {
+  margin: 10px 0;
+}
+
+.aqi_info {
+  list-style-type: none;
+}
+
+.soil-card {
+  display: inline-block; /* Center the card and make it smaller */
+  max-width: 400px; /* Adjust the max-width as needed */
+  width: 100%; /* Ensure it takes full width within the constraints */
+  margin: 0 auto; /* Center the card horizontally */
+}

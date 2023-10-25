@@ -33,6 +33,14 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
+                    {{ form.farm.label(class="form-control-label") }}
+                    {{ form.farm(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.typeoffarming.label(class="form-control-label") }}
+                    {{ form.typeoffarming(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
                     {% if form.password.errors %}
                         {{ form.password(class="form-control form-control-lg is-invalid") }}
