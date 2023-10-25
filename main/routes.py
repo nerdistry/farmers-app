@@ -9,7 +9,7 @@ from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimed
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
-from main.models import BlogPost, Category, User
+from main.models import BlogPost, Category, User, Conversation
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -359,7 +359,7 @@ def stablediffusion_image(hf_api_key, text):
     return None
 
 '''ChatCompletion Model'''
-chat_log = []
+
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
@@ -400,62 +400,97 @@ def farminginfo():
     #form = FarmingInfoForm()
 
     if request.method == 'POST':
-        # Create a message for the GPT-4 model
-        #user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
+        model = 'gpt-3.5-turbo'
+        system_message = "You are a farming expert to help in farming queries only. You speak in simple english that is easy to understand."
         user_message = f"Based on this: {weather_data}, and: {soil_data}, recommend 4 crops to plant and give reasons why for each."
-        
-        #Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests.
-        #user_message = f"name one crop"
-        # Append the user's message to the chat log
-        chat_log.append({"role": "user", "content": user_message})
-        
+        chat_log = [{"role": "system", "content": system_message},{"role": "user", "content": user_message}]    
 
         # Send the message to the GPT-4 model
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=chat_log
         )
 
         # Extract the assistant's response
-        assistant_response = response['choices'][0]['message']['content']
+        crops_suggestions = response['choices'][0]['message']['content']
+        
+        
+        conversation = Conversation(user_id=current_user.id, system_message=system_message, user_message=user_message, assistant_response = crops_suggestions)
+        db.session.add(conversation)
+        db.session.commit()
+        
 
         # Append the assistant's response to the chat log
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        chat_log.append({"role": "assistant", "content": crops_suggestions})
         #chat_log.append(assistant_response)
         
-        first_crop = f"give only the name of the first crop suggested, name only: {assistant_response}"
+        get_first_crop = f"give only the name of the first crop suggested, name only."
         response2 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": first_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_first_crop}]
         )
         first_crop = response2['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
         
-        second_crop = f"give only the name of the second crop suggested, name only: {assistant_response}"
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_first_crop, assistant_response = first_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": first_crop})
+        
+        get_second_crop = f"give only the name of the second crop suggested, name only."
         response3 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": second_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_second_crop}]
         )
         second_crop = response3['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_second_crop, assistant_response = second_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": second_crop})
 
      
-        third_crop = f"give only the name of the third crop suggested, name only: {assistant_response}"
+        get_third_crop = f"give only the name of the third crop suggested, name only."
         response4 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": third_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_third_crop}]
         )
         third_crop = response4['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_third_crop, assistant_response = third_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": third_crop})
   
         
-        fourth_crop = f"give only the name of the fourth crop suggested, name only: {assistant_response}"
+        get_fourth_crop = f"give only the name of the fourth crop suggested, name only."
         response5 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": fourth_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_fourth_crop}]
         )
         fourth_crop = response5['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_fourth_crop, assistant_response = fourth_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": fourth_crop})
+
+        get_pest_control_advice ="for each one of the crops, what pests affect them and suggest two ways to protect ech of those crops? give a link of where i can buy some of the remedies"
+        response6 = openai.ChatCompletion.create(
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_pest_control_advice}]
+        )
+        pest_control_advice = response6['choices'][0]['message']['content']
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_pest_control_advice, assistant_response = pest_control_advice)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": pest_control_advice})
+        
      
 
         image_data = None
@@ -501,39 +536,10 @@ def farminginfo():
 
 
         # Render the 'gpt.html' template with the form and response
-        return render_template('farminginfo.html', title='farminginfo', assistant_response=assistant_response,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
+        return render_template('farminginfo.html', title='farminginfo', assistant_response=crops_suggestions, pest_control_advice=pest_control_advice ,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
     return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
-
-
-@app.route('/get_pest_control', methods=['POST'])
-def get_pest_control_advice():
-    data = request.get_json()
-    assistant_response = data.get('assistantResponse')
-
-    # Initialize chat log with the assistant's response and a question about pests
-    chat_log = [{"role": "user", "content": assistant_response},
-                {"role": "assistant", "content": "for each one of the crops, what pests affect them and suggest two ways to protect ech of those crops?"}]
-
-    try:
-        # Send the chat log to the GPT-3.5-turbo model
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log,
-        )
-
-        # Extract the assistant's response from the model's output
-        assistant_response = response['choices'][0]['message']['content']
-
-        # Return the pest control advice generated by the model
-        pest_control_advice = f"Here is some pest control advice for the suggested crops: ..."
-
-        return jsonify({"pestControlAdvice": assistant_response})
-
-    except Exception as e:
-        # Handle errors appropriately
-        return jsonify({"error": str(e)})
 
 '''TESTING THE APIs'''
 # Route for the home page
@@ -588,7 +594,7 @@ def get_Chat_response(text):
     messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
                 {"role": "user", "content": text}]
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages = messages
     )
     messages.append(response)
