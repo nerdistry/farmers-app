@@ -8,7 +8,7 @@ from flask import jsonify, render_template, sessions, url_for, flash, redirect, 
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
-from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
+from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
 from main.models import BlogPost, Category, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
@@ -395,7 +395,10 @@ def farminginfo():
         return 'Could not get soil information.'
     else:
         soil_data = response.json()
+        #print(soil_data )
     
+    #form = FarmingInfoForm()
+
     if request.method == 'POST':
         # Create a message for the GPT-4 model
         #user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
@@ -603,8 +606,13 @@ def addcategory():
     return render_template('addcategory.html')
 
 
+@app.route('/addproduct', methods=['POST', 'GET'])
+def addproduct():
+    category = Category.query.all()
+    form = AddProductsForm(request.form)
+    return render_template('addproduct.html', title="Add Product Page", form=form, category=category)
+
 @app.route("/store")
 def store():
     products = Addproduct.query.filter(Addproduct.stock > 0)
     return render_template("store.html", products = products)
-
