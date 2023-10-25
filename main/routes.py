@@ -8,7 +8,7 @@ from flask import jsonify, render_template, sessions, url_for, flash, redirect, 
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
-from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm
+from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
 from main.models import BlogPost, Category, User
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
@@ -605,6 +605,12 @@ def addcategory():
         return redirect(url_for('addcategory'))
     return render_template('addcategory.html')
 
+
+@app.route('/addproduct', methods=['POST', 'GET'])
+def addproduct():
+    category = Category.query.all()
+    form = AddProductsForm(request.form)
+    return render_template('addproduct.html', title="Add Product Page", form=form, category=category)
 
 @app.route("/store")
 def store():
