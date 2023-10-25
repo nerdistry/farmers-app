@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from main.models import User
 from flask_login import current_user
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -82,3 +82,14 @@ class BlogPostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
+    
+class AddProductsForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    price= IntegerField('Price', validators=[DataRequired()])
+    stock = IntegerField('Stock', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    
+    image_1 = FileField('image_1', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
+    image_2 = FileField('image_2', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
+    image_3 = FileField('image_3', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
+    
