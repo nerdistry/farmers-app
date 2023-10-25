@@ -395,10 +395,7 @@ def farminginfo():
         return 'Could not get soil information.'
     else:
         soil_data = response.json()
-        #print(soil_data )
     
-    #form = FarmingInfoForm()
-
     if request.method == 'POST':
         # Create a message for the GPT-4 model
         user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
