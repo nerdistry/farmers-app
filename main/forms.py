@@ -92,4 +92,3 @@ class AddProductsForm(FlaskForm):
     image_1 = FileField('image_1', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
     image_2 = FileField('image_2', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
     image_3 = FileField('image_3', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
-    

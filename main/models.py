@@ -60,3 +60,9 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(30), nullable=False, unique=True)
     
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    system_message = db.Column(db.Text, nullable=True)
+    user_message = db.Column(db.Text, nullable = False)
+    assistant_response = db.Column(db.Text, nullable = True)

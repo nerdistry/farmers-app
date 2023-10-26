@@ -9,7 +9,7 @@ from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimed
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
-from main.models import BlogPost, Category, User
+from main.models import BlogPost, Category, User, Conversation
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -25,11 +25,13 @@ from dotenv import load_dotenv
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    active_page = 'home'
+    return render_template('home.html', active_page=active_page)
 
-@app.route("/about/")
+@app.route("/about")
 def about():
-    return render_template('about.html', title='about')
+    active_page = 'about'
+    return render_template('about.html', title='about', active_page=active_page)
 
 
 mail = Mail(app)
@@ -122,6 +124,7 @@ def save_picture(form_picture):
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    active_page = 'profile'
     form= UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -136,7 +139,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+    return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page)
 
 
 def send_reset_email(user):
@@ -184,9 +187,10 @@ def reset_token(token):
 
 
 '''WEATHER AND SOIL APIs'''
-
-@app.route('/weather')
-def weather():
+@app.route('/weather&soil')
+@login_required
+def weatherandsoil():
+    active_page = 'weatherandsoil'
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -220,21 +224,7 @@ def weather():
     else:
         soil_data = response.json()
         #print(soil_data )
-    
-    return render_template('weather.html', weather_data=weather_data)
-
-@app.route('/soil')
-def soil():
     response = requests.get('http://ip-api.com/json/')
-
-    if response.status_code != 200:
-        return 'Could not get location information.'
-
-    location_data = response.json()
-    session['location'] = location_data
-
-    lat = location_data.get('lat')
-    lon = location_data.get('lon')
 
     #fetching soil data.
     AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
@@ -249,12 +239,13 @@ def soil():
         soil_data = response.json()
         #print(soil_data )
     
-    return render_template('soil.html', soil_data=soil_data)
-    
+    return render_template('weatherandsoil.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
 
-@app.route("/blogpost", methods=['GET', 'POST'])
+@app.route("/viewposts", methods=['GET', 'POST'])
 @login_required
-def blogpost():
+def viewposts():
+    active_page = 'viewposts'
+    blogpost = BlogPost.query.all()
     form = BlogPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -262,28 +253,25 @@ def blogpost():
         post = BlogPost(title=title, content=content, user=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Your blog post has been sent!', 'success')
-        return redirect(url_for('blogpost'))
-    return render_template('blogpost.html', form=form)
-
-@app.route("/viewposts")
-@login_required
-def viewposts():
-    blogpost = BlogPost.query.all()
+        flash('Blog posted successfully!', 'success')
+        return redirect(url_for('viewposts'))
     
-    return render_template('viewposts.html', blogpost=blogpost)
+    return render_template('viewposts.html', blogpost=blogpost, form=form, active_page=active_page)
 
 @app.route('/marketplace')
 def marketplace():
-    return render_template('marketplace.html')
+    active_page = 'market_place'
+    return render_template('marketplace.html', active_page=active_page)
 
 @app.route('/help')
 def help():
-    return render_template('help.html')
+    active_page = 'help'
+    return render_template('help.html', active_page=active_page)
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    active_page = 'profile'
+    return render_template('profile.html', active_page=active_page)
 
 
 
@@ -359,7 +347,7 @@ def stablediffusion_image(hf_api_key, text):
     return None
 
 '''ChatCompletion Model'''
-chat_log = []
+model = 'ft:gpt-3.5-turbo-0613:agrisense::8DJIv1Rs'
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
@@ -400,62 +388,96 @@ def farminginfo():
     #form = FarmingInfoForm()
 
     if request.method == 'POST':
-        # Create a message for the GPT-4 model
-        #user_message = f"Based on the following weather data for a specific region: {weather_data}, and comprehensive soil information for the same region: {soil_data}, please provide recommendations for four crop types that are likely to thrive under the given weather conditions and soil properties. Consider factors such as temperature, humidity, precipitation, soil composition, pH levels, and nutrient content to make precise and region-specific crop recommendations."
+        system_message = "You are a farming expert to help in farming queries only. You speak in simple english that is easy to understand."
         user_message = f"Based on this: {weather_data}, and: {soil_data}, recommend 4 crops to plant and give reasons why for each."
-        
-        #Following the recommendation for each crop, identify three common pests known to affect them, and propose one effective methods for protecting these crops from each one of the listed pests.
-        #user_message = f"name one crop"
-        # Append the user's message to the chat log
-        chat_log.append({"role": "user", "content": user_message})
-        
+        chat_log = [{"role": "system", "content": system_message},{"role": "user", "content": user_message}]    
 
         # Send the message to the GPT-4 model
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=chat_log
         )
 
         # Extract the assistant's response
-        assistant_response = response['choices'][0]['message']['content']
+        crops_suggestions = response['choices'][0]['message']['content']
+        
+        
+        conversation = Conversation(user_id=current_user.id, system_message=system_message, user_message=user_message, assistant_response = crops_suggestions)
+        db.session.add(conversation)
+        db.session.commit()
+        
 
         # Append the assistant's response to the chat log
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        chat_log.append({"role": "assistant", "content": crops_suggestions})
         #chat_log.append(assistant_response)
         
-        first_crop = f"give only the name of the first crop suggested, name only: {assistant_response}"
+        get_first_crop = f"give only the name of the first crop suggested, name only."
         response2 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": first_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_first_crop}]
         )
         first_crop = response2['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
         
-        second_crop = f"give only the name of the second crop suggested, name only: {assistant_response}"
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_first_crop, assistant_response = first_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": first_crop})
+        
+        get_second_crop = f"give only the name of the second crop suggested, name only."
         response3 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": second_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_second_crop}]
         )
         second_crop = response3['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_second_crop, assistant_response = second_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": second_crop})
 
      
-        third_crop = f"give only the name of the third crop suggested, name only: {assistant_response}"
+        get_third_crop = f"give only the name of the third crop suggested, name only."
         response4 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": third_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_third_crop}]
         )
         third_crop = response4['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_third_crop, assistant_response = third_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": third_crop})
   
         
-        fourth_crop = f"give only the name of the fourth crop suggested, name only: {assistant_response}"
+        get_fourth_crop = f"give only the name of the fourth crop suggested, name only."
         response5 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log + [{"role": "user", "content": fourth_crop}]
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_fourth_crop}]
         )
         fourth_crop = response5['choices'][0]['message']['content']
-        chat_log.append({"role": "assistant", "content": assistant_response})
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_fourth_crop, assistant_response = fourth_crop)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": fourth_crop})
+
+        get_pest_control_advice ="for each one of the crops, what pests affect them and suggest two ways to protect ech of those crops? give a link of where i can buy some of the remedies"
+        response6 = openai.ChatCompletion.create(
+            model=model,
+            messages=chat_log + [{"role": "user", "content": get_pest_control_advice}]
+        )
+        pest_control_advice = response6['choices'][0]['message']['content']
+        
+        conversation = Conversation(user_id=current_user.id,system_message=system_message, user_message=get_pest_control_advice, assistant_response = pest_control_advice)
+        db.session.add(conversation)
+        db.session.commit()
+        
+        chat_log.append({"role": "assistant", "content": pest_control_advice})
+        
      
 
         image_data = None
@@ -501,39 +523,10 @@ def farminginfo():
 
 
         # Render the 'gpt.html' template with the form and response
-        return render_template('farminginfo.html', title='farminginfo', assistant_response=assistant_response,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
+        return render_template('farminginfo.html', title='farminginfo', assistant_response=crops_suggestions, pest_control_advice=pest_control_advice ,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
     return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
-
-
-@app.route('/get_pest_control', methods=['POST'])
-def get_pest_control_advice():
-    data = request.get_json()
-    assistant_response = data.get('assistantResponse')
-
-    # Initialize chat log with the assistant's response and a question about pests
-    chat_log = [{"role": "user", "content": assistant_response},
-                {"role": "assistant", "content": "for each one of the crops, what pests affect them and suggest two ways to protect ech of those crops?"}]
-
-    try:
-        # Send the chat log to the GPT-3.5-turbo model
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=chat_log,
-        )
-
-        # Extract the assistant's response from the model's output
-        assistant_response = response['choices'][0]['message']['content']
-
-        # Return the pest control advice generated by the model
-        pest_control_advice = f"Here is some pest control advice for the suggested crops: ..."
-
-        return jsonify({"pestControlAdvice": assistant_response})
-
-    except Exception as e:
-        # Handle errors appropriately
-        return jsonify({"error": str(e)})
 
 '''TESTING THE APIs'''
 # Route for the home page
@@ -576,19 +569,23 @@ def questions():
 
 @app.route("/advisor")
 def advisor():
-    return render_template("chat.html")
+    active_page = 'advisor'
+    return render_template("chat.html", active_page=active_page)
 
 @app.route("/get", methods=["POST"])
 def chat():
     msg = request.form["msg"]
+    messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
+                {"role": "user", "content": msg}]
     response = get_Chat_response(msg)
+    messages.append(response)
     return jsonify({"response": response})
 
 def get_Chat_response(text):
     messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
                 {"role": "user", "content": text}]
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages = messages
     )
     messages.append(response)
@@ -616,4 +613,3 @@ def addproduct():
 def store():
     products = Addproduct.query.filter(Addproduct.stock > 0)
     return render_template("store.html", products = products)
-

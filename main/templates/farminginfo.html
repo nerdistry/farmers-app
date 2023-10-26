@@ -26,31 +26,41 @@
 
     <div class="">
         <div class="navbarr">
-            <div class="dropdownn">
-              
-              <img class="dropbtnn" src="{{ url_for('static', filename='icons8-menu.svg') }}" style="width: 50px; height:50px;"\>
+            {% if current_user.is_authenticated %}
+    
+            <a href="{{ url_for('home') }}" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
+            <a href="{{ url_for('advisor') }}" class="{% if active_page == 'advisor' %}active{% endif %}">Advisor</a>
+            <a href="{{ url_for('weatherandsoil') }}" class="{% if active_page == 'weatherandsoil' %}active{% endif %}">Weather&Soil</a>
+            <a href="{{ url_for('farminginfo') }}" class="{% if active_page == 'farminginfo' %}active{% endif %}">Grow</a>
+            <a href="{{ url_for('viewposts') }}" class="{% if active_page == 'viewposts' %}active{% endif %}">Community</a>
+    
+            <a href="{{ url_for('about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a>
+            <a href="{{ url_for('home') }}">Contact</a>
+    
+            <div class="dropdownn2">
+              <button class="dropbtnn">Profile</button>
               <div class="dropdownn-contentt">
-                <a class="" href="{{ url_for('advisor') }}">Advisor</a>
-                <a class="" href="{{ url_for('agritrends') }}">Agritrends</a>
-                <a class="" href="{{ url_for('blogpost') }}">Store</a>
-                <a class="" href="{{ url_for('viewposts') }}">Community</a>
+                <a href="{{ url_for('account') }}">Account</a>
+                <a href="{{ url_for('account') }}">Settings</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
               </div>
             </div>
-              
-              <a href="{{ url_for('home') }}">Home</a>
-              <a href="{{ url_for('about') }}">About</a>
-              <a href="{{ url_for('home') }}">Contact</a>
     
-              <div class="dropdownn2">
-                <button class="dropbtnn">Profile</button>
-                <div class="dropdownn-contentt">
-                  <a class="" href="{{ url_for('account') }}">Account</a>
-                  <a class="" href="{{ url_for('blogpost') }}">Create Post</a>
-                  <a class="" href="{{ url_for('account') }}">Settings</a>
-                  <a class="" href="{{ url_for('logout') }}">Logout</a>
-                </div>
+            <script src="{{ url_for('static', filename='script2.js') }}"></script>
+            {% else %}
+            <a href="{{ url_for('home') }}" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
+            <a href="{{ url_for('about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a>
+            <a href="{{ url_for('home') }}" >Contact</a>
+    
+            <div class="dropdownn2">
+              <button class="dropbtnn">Profile</button>
+              <div class="dropdownn-contentt">
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Sign-Up</a>
               </div>
-        </div>
+            </div>
+            {% endif %}
+          </div>
     </div>
 
 
@@ -62,6 +72,7 @@
                 <div class="h2" style="color: black;">
                     <h2>Make the world a better place!</h2>
                 </div>
+                <form method="POST" action="">
                 <div class="card">
                     <div class="arrow">
                         <a href="javascript:history.back()">
@@ -70,7 +81,6 @@
                     </div>
                     
                     <div class="form">
-                        <form method="POST" action="">
                             <div class="button">
                                 <button class="button1" type="submit">GENERATE</button><br><br>
                             </div>
@@ -79,7 +89,7 @@
                                 <h2 class="h2">Response:</h2>
                             </div>
                             <div class="textarea-container">
-                                <textarea id="response" name="assistant_response" rows="20" style="width: 90%" readonly>{{ assistant_response }}</textarea>
+                                <textarea  rows="20" style="width: 90%" readonly>{{ assistant_response }}</textarea>
                             </div>
                             <div><br></div>
                             <div class="images">
@@ -87,38 +97,27 @@
                                 <img src="data:image/png;base64,{{ image2_data }}" onerror="this.style.display='none';" class="hidden-img"><br>
                                 <img src="data:image/png;base64,{{ image3_data }}" onerror="this.style.display='none';" class="hidden-img">
                                 <img src="data:image/png;base64,{{ image4_data }}" onerror="this.style.display='none';" class="hidden-img">
-                            </div>
-                            
-                        </form>
+                            </div>                        
                     </div>
                 </div>
-
+                
                 <div><br></div>
                 <div><br></div>
-                <div><br></div>
+                <div><br></div>   
 
                 <div class="card">
-                    <div class="form">
-                        <form method="POST" action="">
-                            <div><br></div>
-                            <div class="button">
-                                <button class="button1" id="pest-control-button" type="submit">PEST CONTROL</button><br><br>
-                            </div>
-
-                            <div class="content-container">
-                                <h2 class="h2">Pest control advice:</h2>
-                            </div>
-                            <div class="textarea-container">
-                                <textarea id="pest-control-advice" rows="20" style="width: 90%" readonly></textarea>
-                            </div>
-                            
-                        </form>
+                    <div class="content-container">
+                        <h2 class="h2">Pest Control Advice:</h2>
+                    </div>
+                    <div class="textarea-container">
+                        <textarea  rows="20" style="width: 90%" readonly>{{ pest_control_advice }}</textarea>
                     </div>
                 </div>
+            </form>
             </div>
         </div>
     </div>
-
+<!--
     <script>
         const form = document.querySelector('form');
         const chatBox = document.getElementById('response');
@@ -148,6 +147,7 @@
             }
         });
     </script>
+-->
 </body>
 
 </html>
