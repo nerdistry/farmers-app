@@ -108,6 +108,10 @@ li {
   cursor: pointer;
   background-color: #706969;
 }
+.active {
+  background-color: #595454;
+  border-bottom: 1px solid #333;
+}
 
 /* Style for the dropdown content */
 .dropdownn {

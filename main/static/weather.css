@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 80vh;
+  width: 50%;
 }
 
 .weather-title {
@@ -15,7 +16,12 @@
 .spacing {
   height: 20px; /* Create spacing between title and other text */
 }
-
+ul>li{
+  list-style-type: none;
+}
+.content{
+  display: flex;
+}
 .weather-card {
   background-color: #f4f4f4;
   border-radius: 8px;

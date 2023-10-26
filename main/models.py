@@ -76,3 +76,10 @@ class Addproduct(db.Model):
     
     def __repr__(self):
         return '<Addproduct %r>' % self.name
+    
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    system_message = db.Column(db.Text, nullable=True)
+    user_message = db.Column(db.Text, nullable = False)
+    assistant_response = db.Column(db.Text, nullable = True)
