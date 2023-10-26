@@ -7,9 +7,9 @@ from PIL import Image
 from flask import jsonify, render_template, sessions, url_for, flash, redirect, request, session
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
-from main import app, db, bcrypt, mail
+from main import app, db, bcrypt, mail, photos
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
-from main.models import BlogPost, Category, User
+from main.models import BlogPost, Category, User, Addproduct
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
@@ -606,14 +606,122 @@ def addcategory():
     return render_template('addcategory.html')
 
 
+import hashlib
+from uuid import uuid4
+from werkzeug.utils import secure_filename
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = 'static/images'
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# Define a function to generate a unique filename
+def generate_hex_name(filename):
+    extension = filename.rsplit('.', 1)[1]  # Get the file extension
+    unique_filename = f"{uuid4()}.{extension}"
+    return unique_filename
+
+
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
     category = Category.query.all()
     form = AddProductsForm(request.form)
+    
+    if request.method == "POST":
+        
+        name = form.name.data
+        price = form.price.data
+        stock = form.stock.data
+        description = form.description.data
+        category = request.form.get('category')
+        image_1 = request.files.get('image_1')
+        image_2 = request.files.get('image_2')
+        image_3 = request.files.get('image_3')
+        
+        
+        if image_1 and allowed_file(image_1.filename):
+            unique_filename_1 = generate_hex_name(image_1.filename)
+            image_1.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_1)))
+        else:
+            unique_filename_1 = None  # Or some default image if none is provided
+
+        if image_2 and allowed_file(image_2.filename):
+            unique_filename_2 = generate_hex_name(image_2.filename)
+            image_2.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_2)))
+        else:
+            unique_filename_2 = None
+
+        if image_3 and allowed_file(image_3.filename):
+            unique_filename_3 = generate_hex_name(image_3.filename)
+            image_3.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_3)))
+        else:
+            unique_filename_3 = None
+
+        addpro = Addproduct(
+            name=name,
+            price=price,
+            stock=stock,
+            description=description,
+            category_id=category,
+            image_1=unique_filename_1,  # Store the unique filenames in the database
+            image_2=unique_filename_2,
+            image_3=unique_filename_3
+        )
+        db.session.add(addpro)
+        db.session.commit()
+        flash(f"The product {name} has been added to your database", 'success')
+        return redirect(url_for('addproduct'))
     return render_template('addproduct.html', title="Add Product Page", form=form, category=category)
+
+
+@app.route('/admin')
+def admin():
+    products = Addproduct.query.all()
+    return render_template('admin.html', title='Admin Page', products = products)
+
 
 @app.route("/store")
 def store():
     products = Addproduct.query.filter(Addproduct.stock > 0)
     return render_template("store.html", products = products)
 
+@app.route('/product/<int:id>')
+def single_page(id):
+    product = Addproduct.query.get_or_404(id)
+    return render_template('single_page.html', product=product)
+
+
+
+def MagerDicts(dict1, dict2):
+    if isinstance(dict1, list) and isinstance(dict2, list):
+        return dict1 + dict2
+    elif isinstance(dict1, dict) and isinstance(dict2, dict):
+        return dict(list(dict1.items()) + list(dict2.items()))
+    return False
+
+@app.route('/addcart', methods=['POST'])
+def AddCart():
+    try:
+        product_id = request.form.get('product_id')
+        quantity = request.form.get('quantity')
+        product = Addproduct.query.filter_by(id=product_id).first()
+        if product_id and quantity and request.method == "POST":
+            DictItems = {product_id:{'name': product.name, 'price': product.price, 'quantity': quantity, 'image': product.image_1}}
+
+            if 'ShoppingCart' in session:
+                print(session['ShoppingCart'])
+                if product_id in session['ShoppingCart']:
+                    print("This product is already in your cart")
+                else:
+                    session['ShoppingCart'] = MagerDicts(session['ShoppingCart'], DictItems)
+                    return redirect(request.referrer)
+
+            else:
+                session['ShoppingCart'] = DictItems
+                return redirect(request.referrer)
+
+    except Exception as e:
+        print(e)
+    finally:
+        return redirect(request.referrer)

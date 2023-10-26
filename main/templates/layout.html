@@ -25,7 +25,7 @@
             <div class="dropdownn-contentt">
               <a class="" href="{{ url_for('advisor') }}">Advisor</a>
               <a class="" href="{{ url_for('agritrends') }}">Agritrends</a>
-              <a class="" href="{{ url_for('blogpost') }}">Store</a>
+              <a class="" href="{{ url_for('store') }}">Store</a>
               <a class="" href="{{ url_for('viewposts') }}">Community</a>
             </div>
           </div>
@@ -33,6 +33,7 @@
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('about') }}">About</a>
             <a href="{{ url_for('home') }}">Contact</a>
+            <a href="#">Cart({{session['Shoppingcart']|length}})</a>
 
             <div class="dropdownn2">
               <button class="dropbtnn">Profile</button>
