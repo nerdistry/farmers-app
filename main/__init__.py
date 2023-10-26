@@ -19,9 +19,9 @@ login_manager.login_message_category = 'info'
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'mylesadebayo@gmail.com'
-app.config['MAIL_PASSWORD'] = 'nmqrtdbmbfijlthn'
-
+app.config['MAIL_USERNAME'] = 'agrisensegenzai@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ffin tbmk hmul fyth'
+#lxzq odir gbzs eef
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 

@@ -25,11 +25,13 @@ from dotenv import load_dotenv
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    active_page = 'home'
+    return render_template('home.html', active_page=active_page)
 
-@app.route("/about/")
+@app.route("/about")
 def about():
-    return render_template('about.html', title='about')
+    active_page = 'about'
+    return render_template('about.html', title='about', active_page=active_page)
 
 
 mail = Mail(app)
@@ -122,6 +124,7 @@ def save_picture(form_picture):
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    active_page = 'profile'
     form= UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -136,7 +139,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+    return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page)
 
 
 def send_reset_email(user):
@@ -184,7 +187,61 @@ def reset_token(token):
 
 
 '''WEATHER AND SOIL APIs'''
+@app.route('/weather&soil')
+@login_required
+def weatherandsoil():
+    active_page = 'weatherandsoil'
+    response = requests.get('http://ip-api.com/json/')
 
+    if response.status_code != 200:
+        return 'Could not get location information.'
+
+    location_data = response.json()
+    session['location'] = location_data
+
+    lat = location_data.get('lat')
+    lon = location_data.get('lon')
+
+#fetching weather data.
+    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
+    response = requests.get(weather_url)
+
+    if response.status_code != 200:
+        return 'Could not get weather information.'
+
+    weather_data = response.json()
+    #print(weather_data)  # Print out the data to understand the structure
+
+    #fetching soil data.
+    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
+    headers = {"x-api-key": AMBEEDATA_API_KEY}
+    response = requests.get(soil_url, headers=headers)
+    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+
+    if response.status_code != 200:
+        return 'Could not get soil information.'
+    else:
+        soil_data = response.json()
+        #print(soil_data )
+    response = requests.get('http://ip-api.com/json/')
+
+    #fetching soil data.
+    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
+    headers = {"x-api-key": AMBEEDATA_API_KEY}
+    response = requests.get(soil_url, headers=headers)
+    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+
+    if response.status_code != 200:
+        return 'Could not get soil information.'
+    else:
+        soil_data = response.json()
+        #print(soil_data )
+    
+    return render_template('weatherandsoil.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
+
+'''
 @app.route('/weather')
 def weather():
     response = requests.get('http://ip-api.com/json/')
@@ -250,11 +307,13 @@ def soil():
         #print(soil_data )
     
     return render_template('soil.html', soil_data=soil_data)
-    
+''' 
 
-@app.route("/blogpost", methods=['GET', 'POST'])
+@app.route("/viewposts", methods=['GET', 'POST'])
 @login_required
-def blogpost():
+def viewposts():
+    active_page = 'viewposts'
+    blogpost = BlogPost.query.all()
     form = BlogPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -262,28 +321,25 @@ def blogpost():
         post = BlogPost(title=title, content=content, user=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Your blog post has been sent!', 'success')
-        return redirect(url_for('blogpost'))
-    return render_template('blogpost.html', form=form)
-
-@app.route("/viewposts")
-@login_required
-def viewposts():
-    blogpost = BlogPost.query.all()
+        flash('Blog posted successfully!', 'success')
+        return redirect(url_for('viewposts'))
     
-    return render_template('viewposts.html', blogpost=blogpost)
+    return render_template('viewposts.html', blogpost=blogpost, form=form, active_page=active_page)
 
 @app.route('/marketplace')
 def marketplace():
-    return render_template('marketplace.html')
+    active_page = 'market_place'
+    return render_template('marketplace.html', active_page=active_page)
 
 @app.route('/help')
 def help():
-    return render_template('help.html')
+    active_page = 'help'
+    return render_template('help.html', active_page=active_page)
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    active_page = 'profile'
+    return render_template('profile.html', active_page=active_page)
 
 
 
@@ -359,7 +415,7 @@ def stablediffusion_image(hf_api_key, text):
     return None
 
 '''ChatCompletion Model'''
-
+model = 'ft:gpt-3.5-turbo-0613:agrisense::8DJIv1Rs'
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
@@ -400,7 +456,6 @@ def farminginfo():
     #form = FarmingInfoForm()
 
     if request.method == 'POST':
-        model = 'gpt-3.5-turbo'
         system_message = "You are a farming expert to help in farming queries only. You speak in simple english that is easy to understand."
         user_message = f"Based on this: {weather_data}, and: {soil_data}, recommend 4 crops to plant and give reasons why for each."
         chat_log = [{"role": "system", "content": system_message},{"role": "user", "content": user_message}]    
@@ -582,12 +637,16 @@ def questions():
 
 @app.route("/advisor")
 def advisor():
-    return render_template("chat.html")
+    active_page = 'advisor'
+    return render_template("chat.html", active_page=active_page)
 
 @app.route("/get", methods=["POST"])
 def chat():
     msg = request.form["msg"]
+    messages = [{"role": "system", "content": "you are a farming expert to help in farming queries"}, 
+                {"role": "user", "content": msg}]
     response = get_Chat_response(msg)
+    messages.append(response)
     return jsonify({"response": response})
 
 def get_Chat_response(text):
