@@ -1,7 +1,16 @@
 {% extends "layout.html" %}
 {% block content%}
 
-    <div class="container">
+  <section class="storesection">
+    <div class="card-body">
+        <div class="future2">Quality Crops</div>
+        <div class="precision2">High Quality Yields</div>
+        <button type="button" class="button1" style="margin-left: 49%; margin-top: 5%" onclick="scrollToContainer()">Shop Now</button>
+    </div>
+  </section>
+  
+    <div class="container" id="scroll-target">
+        <div class="text-center bg-success p-2" style="color:black; font-size: 35px;">Products</div>
         <div class="row">
             {% for product in products %}
             <div class="col-md-3 mt-5">
@@ -12,12 +21,19 @@
                     <p class="text-center">Price Ksh{{product.price}}</p>
                   </div>
                   <div class="card-footer">
-                      <a href="{{url_for('single_page', id=product.id)}}" class="float-left btn btn-sn btn-primary">details</a> <a href="#" class="float-right btn btn-sn btn-warning">Add to cart</a>
+                      <a href="{{url_for('single_page', id=product.id)}}" class="float-left btn btn-sn btn-primary">details</a> <a href="#" class="float-right btn btn-sn btn-success">Add to cart</a>
                   </div>
                </div> 
             </div>
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function scrollToContainer() {
+          var container = document.getElementById("scroll-target");
+          container.scrollIntoView({ behavior: 'smooth' });
+        }
+      </script>
     
 {% endblock content %}
