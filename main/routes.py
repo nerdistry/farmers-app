@@ -803,7 +803,7 @@ def clear_cart():
 
     return redirect(url_for('cart'))
 
-my_endpoint = "https://9ce8-102-213-179-25.ngrok-free.app"
+my_endpoint = "https://eot4e959u7dyxed.m.pipedream.net"
 @app.route('/pay', methods=['POST','GET'])
 def MpesaExpress():
     getAccesstoken()
@@ -841,23 +841,24 @@ def MpesaExpress():
 
     }
     res = requests.post(endpoint, json=data, headers=headers)
-    clear_cart()
-    return redirect(url_for('cart'))
+    res.json()
+    return incoming()
     
-    '''
-    if response['Body']['stkCallback']['ResultDesc'] == 'Request cancelled by user':
-        flash('Payment Unsuccesful','danger')
-        return redirect(url_for('cart'))
-    else:
-        flash('Payment Succesfull!','success')
-        clear_cart()
-        return redirect(url_for('store'))
-    '''
 @app.route('/lnmo-callback', methods=['POST'])
 def incoming():
+    print(request.headers)
     data = request.get_json()
     print(data)
-    return "ok"
+    result_code = data['Body']['stkCallback']['ResultCode']
+    if result_code == 0:
+        flash('Payment successful!', 'success')
+        clear_cart() 
+        return redirect(url_for('cart'))
+    elif result_code == 1032:
+        flash('Payment Unsuccessful!')
+        return redirect(url_for('cart'))
+
+
 
 
 def getAccesstoken():

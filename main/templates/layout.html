@@ -42,7 +42,6 @@
         <a href="{{ url_for('about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a>
         <a href="{{ url_for('home') }}">Contact</a>
         <a href="{{ url_for('store') }}" class="{% if active_page == 'store' %}active{% endif %}">Store</a>
-        <a href="{{ url_for('addproduct') }}" class="{% if active_page == 'addproduct' %}active{% endif %}">Sell</a>
         <a href="{{ url_for('cart') }}">Cart({{ items }})</a>
 
         <div class="dropdownn2">
@@ -63,7 +62,7 @@
 
         <div class="popup" id="popup">
           <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
+            <span class="close" onclick="closePopup()">&times;</span><br>
             <h2>Scan to chat with AgriSense</h2>
             <img
               class="qr-code"
