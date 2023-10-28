@@ -3,16 +3,16 @@
 
   <section class="storesection">
     <div class="card-body">
-        <div class="future2">Quality Crops</div>
-        <div class="precision2">High Quality Yields</div>
+        <div class="future" style="margin-top: 0;">Quality Crops</div>
+        <div class="precision">High Quality Yields</div>
 
-        <div class="button-container">
-        <button type="button" class="" style="margin-left: 49%; margin-top: 5%;" onclick="scrollToContainer()">Shop Now</button>
-        <button type="button" class="" style="margin-left: 49%; margin-top:5%;">Sell now</button>
+        <div class="button-container" style="margin-top: 30px;">
+        <button type="button" class="button1" onclick="scrollToContainer()">Shop Now</button>
+        <button type="button" class="button1" style="margin-left: 10%;">Sell now</button>
         <div>
     </div>
   </section>
-  
+
     <div class="container" id="scroll-target">
         <div class="text-center bg-success p-2" style="color:black; font-size: 35px;">Products</div>
         <div class="row">
@@ -25,9 +25,10 @@
                     <p class="text-center">Price Ksh{{product.price}}</p>
                   </div>
                   <div class="card-footer">
-                      <a href="{{url_for('single_page', id=product.id)}}" class="float-left btn btn-sn btn-primary">details</a> <a href="/{{product.id}}/add_to_cart" class="float-right btn btn-sn btn-success">Add to cart</a>
+                      <a href="{{url_for('single_page', id=product.id)}}" class="float-left button1">details</a>
+                      <a href="#" class="float-right button1">Add to cart</a>
                   </div>
-               </div> 
+               </div>
             </div>
             {% endfor %}
         </div>
@@ -39,5 +40,5 @@
           container.scrollIntoView({ behavior: 'smooth' });
         }
       </script>
-    
+
 {% endblock content %}
