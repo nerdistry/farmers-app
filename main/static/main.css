@@ -239,6 +239,9 @@ li {
   border-radius: 12px;
   padding: 20px;
 }
+.button-container {
+        display: inline;
+    }
 
 .logo {
   color: white;

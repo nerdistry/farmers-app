@@ -24,7 +24,36 @@ from dotenv import load_dotenv
 @app.route("/home")
 def home():
     active_page = 'home'
-    return render_template('home.html', active_page=active_page)
+    response = requests.get('http://ip-api.com/json/')
+
+    if response.status_code != 200:
+        return 'Could not get location information.'
+
+    location_data = response.json()
+    session['location'] = location_data
+
+    lat = location_data.get('lat')
+    lon = location_data.get('lon')
+
+#fetching weather data.
+    weather_url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric'
+    response = requests.get(weather_url)
+
+    if response.status_code != 200:
+        return 'Could not get weather information.'
+
+    weather_data = response.json()
+    
+    messages = [{'role':'user', 'content':f'based on this info write a short sentence that defines the weather for today \n {weather_data}'}]
+    
+    response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages
+        )
+
+        # Extract the assistant's response
+    response = response['choices'][0]['message']['content']
+    return render_template('home.html', active_page=active_page, response=response)
 
 @app.route("/about")
 def about():
