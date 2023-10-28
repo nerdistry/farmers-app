@@ -1,3 +1,7 @@
+a {
+	text-decoration: none;
+}
+
 .site-header {
   color: #cbd5db;
 }
@@ -244,7 +248,61 @@ li {
 display: flex;
 flex-direction: column;
 align-items: top;
+justify-content: center;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 6px;
+}
+
+.card-footer a.button1{
+  font-size: 15px;
+  padding: auto 10px;
+}
+
+.cart-card {
+  width: 70vw;
+  margin-top: 10px;
+  padding: 5px;
+  display: flex;
+  border-radius: 10px;
+  box-shadow: rgba(5, 6, 20, 0.2);
+  background-color: #e2e2e2;
+}
+
+.cart-card img {
+  width: 100px;
+  margin-left: 20px;
+}
+
+.cart-card .card-body ul>li {
+  border: 0;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.cart-card .card-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.cart-card .card-body form .button1, .cart-card .card-body form button{
+  width: 100px;
+}
+
+.cart-card ul,.cart-card li {
+  background: rgba(255, 255, 255, 0);
+  width: 90%;
+}
+
+a.cart-card {
+  border: 0;
+  cursor: pointer;
 }
 
 .section1 {
@@ -389,7 +447,7 @@ align-items: top;
   border: 1px solid black;
   padding: 8px 20px;
   border-radius: 5px;
-
+  text-decoration: none;
   font-size: 16px;
   font-family: Montserrat;
   font-weight: 600;
@@ -667,6 +725,7 @@ img {
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
 }
 
 .popup-content {
@@ -684,7 +743,7 @@ img {
   top: 10px;
   right: 15px;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 35px;
 }
 
 .qr-code {
