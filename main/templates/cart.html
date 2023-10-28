@@ -9,7 +9,7 @@
     text-shadow: 0 0 0.1em rgb(255, 255, 255);
   "
 >
-  Cart:
+  Cart: 
 </h1>
 <div class="d-flex justify-content-center flex-wrap">
   {% for item in cart %}
@@ -132,13 +132,13 @@
           </div>
           <form action="{{ url_for('MpesaExpress') }}" method="POST" class="form-control">
           <div class="modal-body">
-            <span><p>Enter your M-Pesa Number: </p></span>
+            <span><p>Your M-Pesa Number: </p></span>
             <label class="sr-only" for="inlineFormInputGroupUsername2">Phone Number</label>
             <div class="input-group mb-2 mr-sm-2">
                 <div class="input-group-prepend">
                 <div class="input-group-text">+</div>
                 </div>
-                <input type="text" name="phone"  class="form-control" id="inlineFormInputGroupUsername2" placeholder="Phone Number">
+                <input type="text" readonly value="{{current_user.phone}}" name="phone"  class="form-control" id="inlineFormInputGroupUsername2">
             </div>
             {% for item in cart %}
             <div style="text-align: left;">
@@ -148,8 +148,7 @@
                 <p>Tax/VAT: N/A</p>
                 <p>Price: KES {{item.price*item.quantity}}</p>
                 <hr>
-                <p>Total Amount: KES {{ final_total|round(2) }}</p>
-                <input type="text" readonly name="amount" value="{{ final_total}}">
+                <p>Total Amount: KES {{ final_total }}</p>
             </div>
             {% endfor %}
           </div>
