@@ -2,83 +2,102 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='weather.css') }}">
 </head>
+
 <body>
   <section class="main">
     <div class="content">
-    <div class="main-body">
-      <div class="centered-text">
-        <h1 class="weather-title">Weather information</h1>
-        <div class="spacing"></div> <!-- Add spacing between title and other text -->
-        <div class="weather-card">
-          <div class="weather-details">
-            <div class="weather-icon">
-              <img src="{{ url_for('static', filename='assets/sun.png') }}" alt="Sun Picture">
-            </div>
-            <div class="weather-text" style="text-align: left">
-              <ul>
-                <li><strong>Temperature:</strong> {{ weather_data.main.temp }}&#8451; (Feels Like: {{ weather_data.main.feels_like }}&#8451;)</li>
-                <li><strong>Weather:</strong> {{ weather_data.weather[0].description }} <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon"></li>
-                <li><strong>Wind:</strong> {{ weather_data.wind.speed }} m/s, Direction: {{ weather_data.wind.deg }}°</li>
-                <li><strong>Pressure:</strong> {{ weather_data.main.pressure }} hPa</li>
-                <li><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</li>
-                <li><strong>Cloud Coverage:</strong> {{ weather_data.clouds.all }}%</li>
-                <li><strong>Visibility:</strong> {{ weather_data.visibility }} m</li>
-              </ul>
+      <div class="main-body">
+        <div class="centered-text">
+          <h1 class="weather-title">Weather information <img src="{{ url_for('static', filename='assets/sun.png') }}"
+              alt="Sun Picture">
+          </h1>
+          <div class="weather-card">
+            <div class="weather-details">
+
+              <div class="weather_desc">
+                <img src="http://openweathermap.org/img/w/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon">
+                <h3>{{ weather_data.weather[0].description }} </h3>
+
+                <p>{{ weather_data.main.temp }}&#8451; (Feels Like: {{
+                  weather_data.main.feels_like }}&#8451;)</p>
+
+                <p><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</p>
+              </div>
+
+              <div class="weather-text" style="text-align: left">
+                <ul>
+                  <li><strong>Wind:</strong> {{ weather_data.wind.speed }} m/s, Direction: {{ weather_data.wind.deg }}°
+                  </li>
+                  <li><strong>Pressure:</strong> {{ weather_data.main.pressure }} hPa</li>
+                </ul>
+
+                <ul>
+                  <li><strong>Cloud Coverage:</strong> {{ weather_data.clouds.all }}%</li>
+                  <li><strong>Visibility:</strong> {{ weather_data.visibility }} m</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="main-body">
-        <div class="soil-body" style="margin-top:40%;">
-          <h1 class="soil-title">Soil Information</h1>
-          <div class="spacing"></div>
-          <div class="spacing"></div>
-          {% if soil_data %}
+      <div class="main-body">
+        <div class="centered-text">
+          <div class="weather-body" style="margin-top: 20-x;">
+            <h1 class="weather-title">Soil Information</h1>
+            {% if soil_data %}
             <div class="weather-card">
-              <div class="soil-details">
-                <ul class="soil-text">
-{#                  <li><strong>Message:</strong> {{ soil_data.message }}</li>#}
-{#                  <li><strong>Stations:</strong>#}
-                    <ul>
-                      <li><strong>CO content:</strong> {{ soil_data.stations[0].CO }}</li>
-                      <li><strong>NO2 content:</strong> {{ soil_data.stations[0].NO2 }}</li>
-                      <li><strong>OZONE content:</strong> {{ soil_data.stations[0].OZONE }}</li>
-                      <li><strong>PM10 content:</strong> {{ soil_data.stations[0].PM10 }}</li>
-                      <li><strong>PM25 content:</strong> {{ soil_data.stations[0].PM25 }}</li>
-                      <li><strong>SO2 content:</strong> {{ soil_data.stations[0].SO2 }}</li>
-                      <li><strong>City:</strong> {{ soil_data.stations[0].city }}</li>
-                      <li><strong>Country Code:</strong> {{ soil_data.stations[0].countryCode }}</li>
-                      <li><strong>Division:</strong> {{ soil_data.stations[0].division }}</li>
-                      <li><strong>Latitude:</strong> {{ soil_data.stations[0].lat }}</li>
-                      <li><strong>Longitude:</strong> {{ soil_data.stations[0].lng }}</li>
-                      <li><strong>Place Name:</strong> {{ soil_data.stations[0].placeName }}</li>
-                      <li><strong>Postal Code:</strong> {{ soil_data.stations[0].postalCode }}</li>
-                      <li><strong>State:</strong> {{ soil_data.stations[0].state }}</li>
-                      <li><strong>Updated At:</strong> {{ soil_data.stations[0].updatedAt }}</li>
-                      <li>AQI: {{ soil_data.stations[0].AQI }}</li>
+              <div class="weather-details">
+                <ul class="weather-text">
+                  {# <li><strong>Message:</strong> {{ soil_data.message }}</li> #}
+                  {# <li><strong>Stations:</strong> #}
+                    <div class="soil-details">
+                      <ul>
+                        <li><strong>CO content:</strong> {{ soil_data.stations[0].CO }}</li>
+                        <li><strong>NO2 content:</strong> {{ soil_data.stations[0].NO2 }}</li>
+                        <li><strong>OZONE content:</strong> {{ soil_data.stations[0].OZONE }}</li>
+                        <li><strong>PM10 content:</strong> {{ soil_data.stations[0].PM10 }}</li>
+                        <li><strong>PM25 content:</strong> {{ soil_data.stations[0].PM25 }}</li>
+                        <li><strong>SO2 content:</strong> {{ soil_data.stations[0].SO2 }}</li>
+                        <li><strong>City:</strong> {{ soil_data.stations[0].city }}</li>
+                        <li><strong>Country Code:</strong> {{ soil_data.stations[0].countryCode }}</li>
+                        <li><strong>Division:</strong> {{ soil_data.stations[0].division }}</li>
+                        <li><strong>Latitude:</strong> {{ soil_data.stations[0].lat }}</li>
+                      </ul>
+
+                      <ul>
+                        <li><strong>Longitude:</strong> {{ soil_data.stations[0].lng }}</li>
+                        <li><strong>Place Name:</strong> {{ soil_data.stations[0].placeName }}</li>
+                        <li><strong>Postal Code:</strong> {{ soil_data.stations[0].postalCode }}</li>
+                        <li><strong>State:</strong> {{ soil_data.stations[0].state }}</li>
+                        <li><strong>Updated At:</strong> {{ soil_data.stations[0].updatedAt }}</li>
+                        <li><strong>AQI:</strong> {{ soil_data.stations[0].AQI }}</li>
                         <li class="aqi_info"> <b>AQI Info:</b>
-                        <ul>
-                          <li><strong>Pollutant:</strong> {{ soil_data.stations[0].aqiInfo.pollutant }}</li>
-                          <li><strong>Concentration:</strong> {{ soil_data.stations[0].aqiInfo.concentration }}</li>
-                          <li><strong>Category:</strong> {{ soil_data.stations[0].aqiInfo.category }}</li>
-                        </ul>
-                      </li>
-                    </ul>
+                          <ul>
+                            <li><strong>Pollutant:</strong> {{ soil_data.stations[0].aqiInfo.pollutant }}</li>
+                            <li><strong>Concentration:</strong> {{ soil_data.stations[0].aqiInfo.concentration }}</li>
+                            <li><strong>Category:</strong> {{ soil_data.stations[0].aqiInfo.category }}</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+
                   </li>
                 </ul>
               </div>
             </div>
-          {% else %}
+            {% else %}
             <p>No soil information available.</p>
-{% endif %}
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
   </section>
 </body>
+
 </html>
 {% endblock content %}

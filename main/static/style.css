@@ -1,7 +1,14 @@
-body,html{
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body{
 	height: 100%;
 	margin: 0;
 	background-color:white;
+	width: 100vw;
 }
 
 .navbar-fixed {
@@ -13,16 +20,15 @@ body,html{
 }
 
 .chat{
-	margin-top: auto;
-	margin-bottom: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 .card{
 	height: 800px;
 	border-radius: 15px !important;
 	background-color: rgba(0,0,0,0.4) !important;
-	width: 150%;
-	margin-left: -25%;
-	margin-top: -10%;
+	width: 80vw;
+	margin-left: 10vw;
 }
 .contacts_body{
 	padding:  0.75rem 0 !important;
@@ -240,7 +246,7 @@ border-radius: 0 0 15px 15px !important;
 	background-color: #333;
 	overflow: hidden;
   }
-  
+
   /* Style for the navbar links */
   .navbarr a {
 	float: left;
@@ -254,7 +260,7 @@ border-radius: 0 0 15px 15px !important;
 	cursor: pointer;
 	background-color: #706969;
   }
-  
+
   /* Style for the dropdown content */
   .dropdownn {
 	float: left;
@@ -265,7 +271,7 @@ border-radius: 0 0 15px 15px !important;
 	overflow: hidden;
 	margin-right: 3%;
   }
-  
+
   /* Style for the dropdown button */
   .dropdownn .dropbtnn {
 	font-size: 16px;
@@ -287,13 +293,13 @@ border-radius: 0 0 15px 15px !important;
 	font-family: inherit;
 	margin: 0;
   }
-  
+
   /* Style for the dropdown content when hovering over the dropdown button */
   .dropdownn:hover, .dropbtnn:hover {
 	background-color: #555;
 	cursor: pointer;
   }
-  
+
   /* Style for the dropdown menu */
   .dropdownn-contentt {
 	display: none;
@@ -302,7 +308,7 @@ border-radius: 0 0 15px 15px !important;
 	min-width: 110px;
 	z-index: 1;
   }
-  
+
   /* Style for the links inside the dropdown menu */
   .dropdownn-contentt a {
 	float: none;
@@ -312,21 +318,21 @@ border-radius: 0 0 15px 15px !important;
 	display: block;
 	text-align: left;
   }
-  
+
   /* Style for the dropdown links on hover */
   .dropdownn-contentt a:hover {
 	background-color: #555;
   }
-  
+
   /* Show the dropdown menu when hovering over the dropdown */
   .dropdownn:hover .dropdownn-contentt {
 	display: block;
   }
-  
+
   .dropdownn2:hover .dropbtnn {
 	background-color: #555;
   }
-  
+
   /* Style for the dropdown menu */
   .dropdownn2-contentt {
 	display: none;
@@ -335,7 +341,7 @@ border-radius: 0 0 15px 15px !important;
 	min-width: 160px;
 	z-index: 1;
   }
-  
+
   /* Style for the links inside the dropdown menu */
   .dropdownn2-contentt a {
 	float: none;
@@ -345,12 +351,12 @@ border-radius: 0 0 15px 15px !important;
 	display: block;
 	text-align: left;
   }
-  
+
   /* Style for the dropdown links on hover */
   .dropdownn2-contentt a:hover {
 	background-color: #555;
   }
-  
+
   /* Show the dropdown menu when hovering over the dropdown */
   .dropdownn2:hover .dropdownn-contentt {
 	display: block;
