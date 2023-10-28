@@ -241,33 +241,19 @@ def weatherandsoil():
     weather_data = response.json()
     #print(weather_data)  # Print out the data to understand the structure
 
-    #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    # fetching soil data.
+    AMBEEDATA_API_KEY = os.getenv('AMBEEDATA_API_KEY')
     soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
     headers = {"x-api-key": AMBEEDATA_API_KEY}
     response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+    print("Soil API Response: ", response.text)  # Add this line to print the response.
 
     if response.status_code != 200:
         return 'Could not get soil information.'
     else:
         soil_data = response.json()
-        #print(soil_data )
-    response = requests.get('http://ip-api.com/json/')
+        print(soil_data)
 
-    #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
-    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
-    headers = {"x-api-key": AMBEEDATA_API_KEY}
-    response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
-
-    if response.status_code != 200:
-        return 'Could not get soil information.'
-    else:
-        soil_data = response.json()
-        #print(soil_data )
-    
     return render_template('weatherandsoil.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
 
 @app.route("/viewposts", methods=['GET', 'POST'])
