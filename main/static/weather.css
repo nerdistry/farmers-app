@@ -1,43 +1,66 @@
+.content{
+  display: flex;
+  align-items: center;
+  height: 90vh;
+}
+
 .main-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  /* height: 80vh; */
   width: 50%;
 }
 
 .weather-title {
   font-size: 36px; /* Increase font size for the title */
   text-align: center;
-  margin-bottom: 20px; /* Add spacing below the title */
+  margin-bottom: 10px; /* Add spacing below the title */
 }
 
 .spacing {
   height: 20px; /* Create spacing between title and other text */
 }
+
 ul>li{
   list-style-type: none;
 }
-.content{
-  display: flex;
-}
+
+
 .weather-card {
   background-color: #f4f4f4;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  text-align: center;
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .weather-details {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 20px;
 }
 
-.weather-icon img {
-  max-width: 80px;
+.soil-details {
+  display: flex;
+  gap: 25px;
+}
+
+.weather_desc{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weather_desc img {
+  width: 100px;
+}
+
+.weather_desc h3{
+  text-transform: capitalize;
+  font-size: 20px;
 }
 
 .weather-text ul {
@@ -53,4 +76,8 @@ ul>li{
 
 .weather-text li strong {
   font-weight: bold;
+}
+
+.aqi_info li{
+  margin-left: 15px;
 }
