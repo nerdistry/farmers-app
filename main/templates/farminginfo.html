@@ -37,7 +37,7 @@
         <a href="{{ url_for('home') }}">Contact</a>
         <a href="{{ url_for('store') }}" class="{% if active_page == 'store' %}active{% endif %}">Store</a>
         <a href="{{ url_for('addproduct') }}" class="{% if active_page == 'addproduct' %}active{% endif %}">Sell</a>
-        <a href="#">Cart({{session['Shoppingcart']|length}})</a>
+        <a href="{{ url_for('cart') }}">Cart({{ items }})</a>
 
         <div class="dropdownn2">
           <button class="dropbtnn {% if active_page == 'profile' %}active{% endif %}">Profile</button>
