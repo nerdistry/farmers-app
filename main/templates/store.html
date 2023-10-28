@@ -1,44 +1,46 @@
 {% extends "layout.html" %}
 {% block content%}
 
-  <section class="storesection">
-    <div class="card-body">
-        <div class="future" style="margin-top: 0;">Quality Crops</div>
-        <div class="precision">High Quality Yields</div>
+<section class="storesection">
+  <div class="card-body">
+    <div class="future" style="margin-top: 0;">Quality Crops</div>
+    <div class="precision">High Quality Yields</div>
 
-        <div class="button-container" style="margin-top: 30px;">
+    <div class="button-container" style="margin-top: 30px;">
         <button type="button" class="button1" onclick="scrollToContainer()">Shop Now</button>
         <a href="{{ url_for('addproduct') }}" class="button1" style="margin-left: 10%; text-decoration: none;">Sell now</a>
         <div>
     </div>
   </section>
 
-    <div class="container" id="scroll-target">
-        <div class="text-center bg-success p-2" style="color:black; font-size: 35px;">Products</div>
-        <div class="row">
-            {% for product in products %}
-            <div class="col-md-3 mt-5">
-               <div class="card">
-                <img src="{{ url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}" class="card-img-top" height="50">
-                  <div class="card-body">
-                    <h5 class="text-center">{{product.name}}</h5>
-                    <p class="text-center">Price Ksh{{product.price}}</p>
-                  </div>
-                  <div class="card-footer">
-                      <a href="{{url_for('single_page', id=product.id)}}" class="float-left button1">details</a>
-                      <a href="#" class="float-right button1">Add to cart</a>
-                  </div>
-               </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
 
-    <script>
-        function scrollToContainer() {
-          var container = document.getElementById("scroll-target");
-          container.scrollIntoView({ behavior: 'smooth' });
-        }
-      </script>
+<div class="container" id="scroll-target">
+  <div class="text-center bg-success p-2" style="color:black; font-size: 35px;">Products</div>
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-3 mt-5">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}"
+          class="card-img-top" height="50">
+        <div class="card-body">
+          <h5 class="text-center">{{product.name}}</h5>
+          <p class="text-center">Price Ksh{{product.price}}</p>
+        </div>
+        <div class="card-footer">
+          <a href="{{url_for('single_page', id=product.id)}}" class="btn button1">Details</a>
+          <a href="#" class="btn button1">Add to cart</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function scrollToContainer() {
+    var container = document.getElementById("scroll-target");
+    container.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
 
 {% endblock content %}
