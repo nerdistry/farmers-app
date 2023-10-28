@@ -81,7 +81,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password,phone=form.phone.data, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, phone=form.phone.data, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
 
         # Generate a confirmation token
         token = serializer.dumps(user.email, salt='email-confirm')
