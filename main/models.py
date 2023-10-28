@@ -60,8 +60,9 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(30), nullable=False, unique=True)
     
-class Addproduct(db.Model):
+class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10,2), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
@@ -75,7 +76,7 @@ class Addproduct(db.Model):
     image_3 = db.Column(db.String(150), nullable =False, default='image.jpg')
     
     def __repr__(self):
-        return '<Addproduct %r>' % self.name
+        return '<Product %r>' % self.name
     
 class Conversation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -83,3 +84,28 @@ class Conversation(db.Model):
     system_message = db.Column(db.Text, nullable=True)
     user_message = db.Column(db.Text, nullable = False)
     assistant_response = db.Column(db.Text, nullable = True)
+
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+
+    def __init__(self, user_id, product_id, quantity=1):
+        self.user_id = user_id
+        self.product_id = product_id
+        self.quantity = quantity
+    
+    def update_quantity(self, quantity):
+        self.quantity += quantity
+        db.session.commit()
+    
+    def saveToDB(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def deleteFromDB(self):
+        db.session.delete(self)
+        db.session.commit()
+

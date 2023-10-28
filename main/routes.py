@@ -1,19 +1,18 @@
-
 import os, openai, io, base64, requests
 from markupsafe import Markup
 import secrets
 import tempfile
+from requests.auth import HTTPBasicAuth
 from PIL import Image
 from flask import jsonify, render_template, sessions, url_for, flash, redirect, request, session
 from itsdangerous import BadSignature, Serializer, TimedSerializer, URLSafeTimedSerializer
 from yaml import serialize_all 
 from main import app, db, bcrypt, mail, photos
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BlogPostForm, AddProductsForm
-from main.models import BlogPost, Category, Conversation, User, Addproduct
+from main.models import BlogPost, Category, Conversation, User, Product, Cart
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
-
 import matplotlib.pyplot as plt
 from PIL import Image
 from base64 import b64decode
@@ -55,12 +54,20 @@ def home():
 
         # Extract the assistant's response
     response = response['choices'][0]['message']['content']
-    return render_template('home.html', active_page=active_page, response=response)
+    if current_user.is_authenticated:
+        user_id=current_user.id
+        cart_items = Cart.query.filter_by(user_id=user_id).all()
+        items = len(cart_items)
+
+    return render_template('home.html', active_page=active_page, response=response, items=items)
 
 @app.route("/about")
 def about():
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     active_page = 'about'
-    return render_template('about.html', title='about', active_page=active_page)
+    return render_template('about.html', title='about', active_page=active_page, items=items)
 
 
 mail = Mail(app)
@@ -154,6 +161,9 @@ def save_picture(form_picture):
 @login_required
 def account():
     active_page = 'profile'
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     form= UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -168,7 +178,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page)
+    return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page, items=items)
 
 
 def send_reset_email(user):
@@ -220,6 +230,9 @@ def reset_token(token):
 @login_required
 def weatherandsoil():
     active_page = 'weatherandsoil'
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -241,39 +254,27 @@ def weatherandsoil():
     weather_data = response.json()
     #print(weather_data)  # Print out the data to understand the structure
 
-    #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
+    # fetching soil data.
+    AMBEEDATA_API_KEY = os.getenv('AMBEEDATA_API_KEY')
     soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
     headers = {"x-api-key": AMBEEDATA_API_KEY}
     response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
+    print("Soil API Response: ", response.text)  # Add this line to print the response.
 
     if response.status_code != 200:
         return 'Could not get soil information.'
     else:
         soil_data = response.json()
-        #print(soil_data )
-    response = requests.get('http://ip-api.com/json/')
-
-    #fetching soil data.
-    AMBEEDATA_API_KEY=os.getenv('AMBEEDATA_API_KEY')
-    soil_url = f'https://api.ambeedata.com/latest/by-lat-lng?lat={lat}&lng={lon}'
-    headers = {"x-api-key": AMBEEDATA_API_KEY}
-    response = requests.get(soil_url, headers=headers)
-    #print("Soil API Response: ", response.text)  # Add this line to print the response.
-
-    if response.status_code != 200:
-        return 'Could not get soil information.'
-    else:
-        soil_data = response.json()
-        #print(soil_data )
-    
+        print(soil_data)
     return render_template('weatherandsoil.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
 
 @app.route("/viewposts", methods=['GET', 'POST'])
 @login_required
 def viewposts():
     active_page = 'viewposts'
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     blogpost = BlogPost.query.all()
     form = BlogPostForm()
     if form.validate_on_submit():
@@ -285,7 +286,7 @@ def viewposts():
         flash('Blog posted successfully!', 'success')
         return redirect(url_for('viewposts'))
     
-    return render_template('viewposts.html', blogpost=blogpost, form=form, active_page=active_page)
+    return render_template('viewposts.html', blogpost=blogpost, form=form, active_page=active_page, items=items)
 
 @app.route('/marketplace')
 def marketplace():
@@ -380,6 +381,9 @@ model = 'ft:gpt-3.5-turbo-0613:agrisense::8DJIv1Rs'
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     response = requests.get('http://ip-api.com/json/')
 
     if response.status_code != 200:
@@ -555,7 +559,7 @@ def farminginfo():
         return render_template('farminginfo.html', title='farminginfo', assistant_response=crops_suggestions, pest_control_advice=pest_control_advice ,first_crop=first_crop, image_data=Markup(image_data), second_crop=second_crop, image2_data=Markup(image2_data),  third_crop=third_crop, image3_data=Markup(image3_data),  fourth_crop=fourth_crop, image4_data=Markup(image4_data))
 
     # Render the 'gpt.html' template with the form when the page is initially loaded
-    return render_template('farminginfo.html', title='farminginfo', active_page=active_page)
+    return render_template('farminginfo.html', title='farminginfo', active_page=active_page, items=items)
 
 '''TESTING THE APIs'''
 # Route for the home page
@@ -587,19 +591,13 @@ def huggingface():
 
     return render_template('huggingface.html', image_data=Markup(image_data))
 
-@app.route('/agritrends')
-def agritrends():
-    return render_template('agritrends.html')
-
-@app.route('/questions')
-def questions():
-    return render_template('questions.html')
-
-
 @app.route("/advisor")
 def advisor():
     active_page = 'advisor'
-    return render_template("chat.html", active_page=active_page)
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
+    return render_template("chat.html", active_page=active_page, items=items)
 
 @app.route("/get", methods=["POST"])
 def chat():
@@ -622,6 +620,9 @@ def get_Chat_response(text):
 
 @app.route('/addcategory', methods=['GET','POST'])
 def addcategory():
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     if request.method=="POST":
         getcategory = request.form.get('category')
         category = Category(category=getcategory)
@@ -629,7 +630,7 @@ def addcategory():
         db.session.commit()
         flash(f'The Category {getcategory} was added', 'success')
         return redirect(url_for('addcategory'))
-    return render_template('addcategory.html')
+    return render_template('addcategory.html', items=items)
 
 
 import hashlib
@@ -652,12 +653,16 @@ def generate_hex_name(filename):
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
     active_page="addproduct"
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
     category = Category.query.all()
     form = AddProductsForm(request.form)
     
     if request.method == "POST":
         
         name = form.name.data
+        user_id = current_user.id
         price = form.price.data
         stock = form.stock.data
         description = form.description.data
@@ -685,8 +690,9 @@ def addproduct():
         else:
             unique_filename_3 = None
 
-        addpro = Addproduct(
+        addpro = Product(
             name=name,
+            user_id=user_id,
             price=price,
             stock=stock,
             description=description,
@@ -699,26 +705,34 @@ def addproduct():
         db.session.commit()
         flash(f"The product {name} has been added to your database", 'success')
         return redirect(url_for('addproduct'))
-    return render_template('addproduct.html', title="Add Product Page", form=form, category=category)
+    return render_template('addproduct.html', title="Add Product Page", form=form, category=category, items=items)
 
 
 @app.route('/admin')
 def admin():
-    products = Addproduct.query.all()
+    products = Product.query.all()
     return render_template('admin.html', title='Admin Page', products = products)
 
 
 @app.route("/store")
 def store():
     active_page="store"
-    products = Addproduct.query.filter(Addproduct.stock > 0)
-    return render_template("store.html", products = products, active_page = active_page)
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
+    products = Product.query.filter(Product.stock > 0)
+    return render_template("store.html", products = products, active_page = active_page,items=items)
 
 
-@app.route('/product/<int:id>')
+@app.route('/product/<int:id>', methods=['GET','POST'])
 def single_page(id):
-    product = Addproduct.query.get_or_404(id)
-    return render_template('single_page.html', product=product)
+    user_id=current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    items = len(cart_items)
+    product = Product.query.get_or_404(id)
+    flash('Product added to cart succesfully!.', 'success')
+        
+    return render_template('single_page.html', product=product, items=items)
 
 
 
@@ -729,28 +743,103 @@ def MagerDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
     return False
 
-@app.route('/addcart', methods=['POST'])
-def AddCart():
-    try:
-        product_id = request.form.get('product_id')
-        quantity = request.form.get('quantity')
-        product = Addproduct.query.filter_by(id=product_id).first()
-        if product_id and quantity and request.method == "POST":
-            DictItems = {product_id:{'name': product.name, 'price': product.price, 'quantity': quantity, 'image': product.image_1}}
+@app.route('/cart')
+def cart():
+    user_id = current_user.id 
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    products = []
+    items = len(cart_items)
+    final_total = 0
+    for item in cart_items:
+        product = Product.query.get(item.product_id)
+        product.quantity = item.quantity
+        final_total += product.price * product.quantity
+        final_total = int(final_total)
+        products.append(product)
+    return render_template('cart.html', cart=products, final_total=final_total, items=items)
 
-            if 'ShoppingCart' in session:
-                print(session['ShoppingCart'])
-                if product_id in session['ShoppingCart']:
-                    print("This product is already in your cart")
-                else:
-                    session['ShoppingCart'] = MagerDicts(session['ShoppingCart'], DictItems)
-                    return redirect(request.referrer)
+@app.route('/<int:product_id>/add_to_cart', methods=['POST','GET'])
+def add_to_cart(product_id):
+    if current_user.is_authenticated:
+        user_id = current_user.id 
+        cart_item = Cart.query.filter_by(product_id=product_id, user_id=user_id).first()
+        if cart_item:
+            cart_item.quantity += 1
+            cart_item.saveToDB()
+        else:
+            cart = Cart(product_id=product_id, user_id=user_id, quantity=1)
+            cart.saveToDB()
+    else:
+        flash('You need to log in to add items to your cart','danger')
+        return redirect(url_for('login'))
+    flash('Product added to cart succesfully!.', 'success')
+    return redirect(url_for('store'))
 
-            else:
-                session['ShoppingCart'] = DictItems
-                return redirect(request.referrer)
+@app.route('/cart/<int:product_id>/remove', methods=["POST", "GET"])
+def remove_from_cart(product_id):
+    user_id = current_user.id
+    cart_item = Cart.query.filter_by(product_id=product_id, user_id=user_id).first()
 
-    except Exception as e:
-        print(e)
-    finally:
-        return redirect(request.referrer)
+    if not cart_item:
+        return redirect(url_for('cart'))
+
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.saveToDB()
+    else:
+        cart_item.deleteFromDB()
+
+    return redirect(url_for('cart'))
+
+@app.route('/cart/clear', methods=["POST", "GET"])
+def clear_cart():
+    user_id = current_user.id
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+
+    for cart_item in cart_items:
+        cart_item.deleteFromDB()
+
+    return redirect(url_for('cart'))
+
+my_endpoint = "https://c57f-102-213-179-25.ngrok-free.app"
+@app.route('/pay', methods=['POST','GET'])
+def MpesaExpress():
+    getAccesstoken()
+    amount = request.form['amount']
+    phone = request.form['phone']
+
+    endpoint='https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+    access_token = getAccesstoken()
+    headers = {'Authorization': 'Bearer %s' % access_token}
+    Timestamp = datetime.now()
+    times = Timestamp.strftime('%Y%m%d%H%M%S')
+    password = '174379' + 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919' + times
+    password = base64.b64encode(password.encode('utf-8')).decode('utf-8')
+
+    data = {
+        "BusinessShortCode": "174379",    
+        "Password": password,    
+        "Timestamp":times,    
+        "TransactionType": "CustomerPayBillOnline",    
+        "PartyA":phone,    
+        "PartyB":"174379", 
+        "PhoneNumber": phone,   
+        "CallBackURL":my_endpoint,    
+        "AccountReference":"Agrisense",    
+        "TransactionDesc":"HelloTest",
+        "Amount": amount  
+
+    }
+    res = requests.post(endpoint, json=data, headers=headers)
+    print(request.get_json)
+    clear_cart()
+    return res.json()
+
+def getAccesstoken():
+    consumer_key = 'MxDfkY05AO0RFqKYGnBhp1LBjCNjTMqY'
+    consumer_secret = 'M5lcztAHirHGAf6X'
+    endpoint = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+
+    r = requests.get(endpoint, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    data = r.json()
+    return data['access_token']

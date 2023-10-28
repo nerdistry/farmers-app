@@ -9,6 +9,8 @@
     />
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -41,7 +43,7 @@
         <a href="{{ url_for('home') }}">Contact</a>
         <a href="{{ url_for('store') }}" class="{% if active_page == 'store' %}active{% endif %}">Store</a>
         <a href="{{ url_for('addproduct') }}" class="{% if active_page == 'addproduct' %}active{% endif %}">Sell</a>
-        <a href="#">Cart({{session['Shoppingcart']|length}})</a>
+        <a href="{{ url_for('cart') }}">Cart({{ items }})</a>
 
         <div class="dropdownn2">
           <button class="dropbtnn {% if active_page == 'profile' %}active{% endif %}">Profile</button>
@@ -101,6 +103,8 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
