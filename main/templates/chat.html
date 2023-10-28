@@ -35,6 +35,9 @@
         <a href="{{ url_for('viewposts') }}" class="{% if active_page == 'viewposts' %}active{% endif %}">Community</a>
 
         <a href="{{ url_for('about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a>
+        <a href="{{ url_for('store') }}" class="{% if active_page == 'store' %}active{% endif %}">Store</a>
+        <a href="{{ url_for('addproduct') }}" class="{% if active_page == 'addproduct' %}active{% endif %}">Sell</a>
+        <a href="{{ url_for('cart') }}">Cart({{ items }})</a>
         <a href="{{ url_for('home') }}">Contact</a>
 
         <div class="dropdownn2">
