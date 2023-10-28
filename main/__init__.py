@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename  # Import secure_filename from werkze
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:faraja@localhost/agrisense'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/agrisense'
 app.config.from_pyfile('../config.cfg')
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images')
 app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/images'))

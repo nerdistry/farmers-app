@@ -59,7 +59,7 @@ def home():
         cart_items = Cart.query.filter_by(user_id=user_id).all()
         items = len(cart_items)
 
-    return render_template('home.html', active_page=active_page, response=response, items=items)
+    return render_template('home.html', active_page=active_page, response=response)
 
 @app.route("/about")
 def about():

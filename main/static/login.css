@@ -1,0 +1,173 @@
+
+
+body{
+    background-image:url("lgbgg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    font-family: poppins;
+  }
+
+/* Style for the content div */
+.loginbg {
+    background-color: white; /* Semi-transparent white background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Set your desired maximum width */
+    padding:17%;
+    border-radius:15px;
+    padding-top:10%;
+  }
+
+.container{
+    margin-top: 8%;
+}
+  
+
+/* Button styles */
+.login-button {
+    color: black; /* Default text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    width: 100%
+}
+
+/* Button styles on hover */
+.login-button:hover {
+    background-color: #4E944F; /* New background color on hover */
+    color: white;
+}
+
+
+@media(max-width: 576px){
+	.contacts_card{
+	margin-bottom: 15px !important;
+}
+}
+
+
+
+
+/* Style for the navbar */
+.navbarr {
+	background-color: #333;
+	overflow: hidden;
+  }
+  
+  /* Style for the navbar links */
+  .navbarr a {
+	float: left;
+	font-size: 16px;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+  }
+  .navbarr a:hover{
+	cursor: pointer;
+	background-color: #706969;
+  }
+  
+  /* Style for the dropdown content */
+  .dropdownn {
+	float: left;
+	overflow: hidden;
+  }
+  .dropdownn2 {
+	float: right;
+	overflow: hidden;
+	margin-right: 3%;
+  }
+  
+  /* Style for the dropdown button */
+  .dropdownn .dropbtnn {
+	font-size: 16px;
+	border: none;
+	outline: none;
+	color: white;
+	padding: 14px 16px;
+	background-color: inherit;
+	font-family: inherit;
+	margin: 0;
+  }
+  .dropdownn2 .dropbtnn {
+	font-size: 16px;
+	border: none;
+	outline: none;
+	color: white;
+	padding: 14px 16px;
+	background-color: inherit;
+	font-family: inherit;
+	margin: 0;
+  }
+  
+  /* Style for the dropdown content when hovering over the dropdown button */
+  .dropdownn:hover, .dropbtnn:hover {
+	background-color: #555;
+	cursor: pointer;
+  }
+  
+  /* Style for the dropdown menu */
+  .dropdownn-contentt {
+	display: none;
+	position: absolute;
+	background-color: #333;
+	min-width: 110px;
+	z-index: 1;
+  }
+  
+  /* Style for the links inside the dropdown menu */
+  .dropdownn-contentt a {
+	float: none;
+	color: white;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+  }
+  
+  /* Style for the dropdown links on hover */
+  .dropdownn-contentt a:hover {
+	background-color: #555;
+  }
+  
+  /* Show the dropdown menu when hovering over the dropdown */
+  .dropdownn:hover .dropdownn-contentt {
+	display: block;
+  }
+  
+  .dropdownn2:hover .dropbtnn {
+	background-color: #555;
+  }
+  
+  /* Style for the dropdown menu */
+  .dropdownn2-contentt {
+	display: none;
+	position: absolute;
+	background-color: #333;
+	min-width: 160px;
+	z-index: 1;
+  }
+  
+  /* Style for the links inside the dropdown menu */
+  .dropdownn2-contentt a {
+	float: none;
+	color: white;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+  }
+  
+  /* Style for the dropdown links on hover */
+  .dropdownn2-contentt a:hover {
+	background-color: #555;
+  }
+  
+  /* Show the dropdown menu when hovering over the dropdown */
+  .dropdownn2:hover .dropdownn-contentt {
+	display: block;
+  }
