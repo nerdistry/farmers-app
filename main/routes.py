@@ -54,6 +54,7 @@ def home():
 
         # Extract the assistant's response
     response = response['choices'][0]['message']['content']
+    items = 0
     if current_user.is_authenticated:
         user_id=current_user.id
         cart_items = Cart.query.filter_by(user_id=user_id).all()
@@ -80,7 +81,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password,phone=form.phone.data, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
 
         # Generate a confirmation token
         token = serializer.dumps(user.email, salt='email-confirm')
@@ -801,12 +802,20 @@ def clear_cart():
 
     return redirect(url_for('cart'))
 
-my_endpoint = "https://c57f-102-213-179-25.ngrok-free.app"
+my_endpoint = "https://9ce8-102-213-179-25.ngrok-free.app"
 @app.route('/pay', methods=['POST','GET'])
 def MpesaExpress():
     getAccesstoken()
-    amount = request.form['amount']
-    phone = request.form['phone']
+    user_id = current_user.id 
+    phone = current_user.phone
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    final_total = 0
+    for item in cart_items:
+        product = Product.query.get(item.product_id)
+        product.quantity = item.quantity
+        final_total += product.price * product.quantity
+        final_total = int(final_total)
+
 
     endpoint='https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
     access_token = getAccesstoken()
@@ -824,16 +833,31 @@ def MpesaExpress():
         "PartyA":phone,    
         "PartyB":"174379", 
         "PhoneNumber": phone,   
-        "CallBackURL":my_endpoint,    
+        "CallBackURL":my_endpoint + '/lnmo-callback',    
         "AccountReference":"Agrisense",    
         "TransactionDesc":"HelloTest",
-        "Amount": amount  
+        "Amount": final_total  
 
     }
     res = requests.post(endpoint, json=data, headers=headers)
-    print(request.get_json)
     clear_cart()
-    return res.json()
+    return redirect(url_for('cart'))
+    
+    '''
+    if response['Body']['stkCallback']['ResultDesc'] == 'Request cancelled by user':
+        flash('Payment Unsuccesful','danger')
+        return redirect(url_for('cart'))
+    else:
+        flash('Payment Succesfull!','success')
+        clear_cart()
+        return redirect(url_for('store'))
+    '''
+@app.route('/lnmo-callback', methods=['POST'])
+def incoming():
+    data = request.get_json()
+    print(data)
+    return "ok"
+
 
 def getAccesstoken():
     consumer_key = 'MxDfkY05AO0RFqKYGnBhp1LBjCNjTMqY'
