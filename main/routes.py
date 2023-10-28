@@ -241,6 +241,7 @@ def weatherandsoil():
 
     location_data = response.json()
     session['location'] = location_data
+    print(location_data)
 
     lat = location_data.get('lat')
     lon = location_data.get('lon')
@@ -253,7 +254,7 @@ def weatherandsoil():
         return 'Could not get weather information.'
 
     weather_data = response.json()
-    #print(weather_data)  # Print out the data to understand the structure
+    print(weather_data)  # Print out the data to understand the structure
 
     # fetching soil data.
     AMBEEDATA_API_KEY = os.getenv('AMBEEDATA_API_KEY')

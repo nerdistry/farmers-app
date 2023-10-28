@@ -6,7 +6,12 @@ from flask_login import LoginManager
 from itsdangerous import TimedSerializer, URLSafeTimedSerializer 
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 import os
+
+# from werkzeug.utils import secure_filename
+
+
 from werkzeug.utils import secure_filename  # Import secure_filename from werkzeug.utils
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)

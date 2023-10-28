@@ -90,8 +90,10 @@ li {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #ffffff; /* Customize the background color */
-  z-index: 1000; /* Adjust the z-index to ensure it's above other content */
+  background-color: #ffffff;
+  /* Customize the background color */
+  z-index: 1000;
+  /* Adjust the z-index to ensure it's above other content */
   /* Add any other styling you need */
 }
 
@@ -104,10 +106,12 @@ li {
   padding: 14px 16px;
   text-decoration: none;
 }
-.navbarr a:hover{
+
+.navbarr a:hover {
   cursor: pointer;
   background-color: #706969;
 }
+
 .active {
   background-color: #595454;
   border-bottom: 1px solid #333;
@@ -118,6 +122,7 @@ li {
   float: left;
   overflow: hidden;
 }
+
 .dropdownn2 {
   float: right;
   overflow: hidden;
@@ -135,6 +140,7 @@ li {
   font-family: inherit;
   margin: 0;
 }
+
 .dropdownn2 .dropbtnn {
   font-size: 16px;
   border: none;
@@ -147,7 +153,8 @@ li {
 }
 
 /* Style for the dropdown content when hovering over the dropdown button */
-.dropdownn:hover, .dropbtnn:hover {
+.dropdownn:hover,
+.dropbtnn:hover {
   background-color: #555;
   cursor: pointer;
 }
@@ -214,34 +221,44 @@ li {
   display: block;
 }
 
+.storesection {
+  background-image: url("bgbg.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 92vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  padding: 10px;
+}
+
+.button-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.storesection .card-body {
+display: flex;
+flex-direction: column;
+align-items: top;
+  justify-content: center;
+}
+
 .section1 {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("pictures/bg.jpg");
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: 95vh;
   display: flex;
-
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   color: #fff;
-
   padding: 20px;
 }
-
-.storesection {
-  background-image:url("bgbg.jpg");
-  background-size: cover;
-  background-position: center;
-  height: 1000px;
-  display: flex;
-  justify-content: center;
-  color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-}
-.button-container {
-        display: inline;
-    }
 
 .logo {
   color: white;
@@ -250,24 +267,27 @@ li {
   font-weight: 700;
   letter-spacing: 7px;
   word-wrap: break-word;
+  text-align: left;
+  margin-right: 15%;
 }
 
 .content {
   margin: 0 auto;
-  width: 50%;
+  width: 100%;
   text-align: center;
+  display: flex;
 }
 
 .future {
   color: white;
-  font-size: 84px;
+  font-size: 4.2em;
   font-family: Montserrat;
   font-weight: 400;
-  line-height: 96px;
+  line-height: 80px;
   letter-spacing: 5.12px;
   word-wrap: break-word;
-  margin-top: 20%;
-  margin-right: 15%;
+  margin-top: 10%;
+  text-align: center;
 }
 
 .precision {
@@ -278,7 +298,7 @@ li {
   line-height: 43.2px;
   letter-spacing: 1.2px;
   word-wrap: break-word;
-  margin-right: 15%;
+  text-align: center;
 }
 
 .future2 {
@@ -316,10 +336,12 @@ li {
   padding: 20px;
   padding-left: 15%;
 }
+
 .borderline {
   padding: 30px;
   border-left: 2px solid black;
 }
+
 .borderline2 {
   padding: 30px;
   border-left: 2px solid white;
@@ -365,15 +387,16 @@ li {
   background-color: white;
   color: black;
   border: 1px solid black;
-  padding: 8px;
-  border-radius: 12px;
+  padding: 8px 20px;
+  border-radius: 5px;
 
   font-size: 16px;
   font-family: Montserrat;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 22.4px;
   word-wrap: break-word;
 }
+
 .button1:hover {
   background-color: #4e944f;
   cursor: pointer;
@@ -442,11 +465,11 @@ li {
 }
 
 .content6-left {
-  width: 25%;
+  width: 70%;
   padding: 20px;
   background-color: black;
   color: white;
-  margin-left: 13%;
+  margin-left: 15%;
   border-radius: 15px;
 }
 
@@ -477,6 +500,7 @@ li {
   letter-spacing: 1.92px;
   word-wrap: break-word;
 }
+
 .text2 {
   color: black;
   font-size: 16px;
@@ -486,6 +510,7 @@ li {
   letter-spacing: 0.64px;
   word-wrap: break-word;
 }
+
 .text3 {
   color: black;
   font-size: 40px;
@@ -495,6 +520,7 @@ li {
   letter-spacing: 3.2px;
   word-wrap: break-word;
 }
+
 h4 {
   color: #000;
   font-family: Montserrat;
@@ -513,6 +539,7 @@ h4 {
   letter-spacing: 2.24px;
   word-wrap: break-word;
 }
+
 .different {
   color: white;
   font-size: 24px;
@@ -522,6 +549,7 @@ h4 {
   letter-spacing: 1.92px;
   word-wrap: break-word;
 }
+
 .ending {
   color: white;
   font-size: 16px;
@@ -543,11 +571,83 @@ img {
     flex-direction: column;
   }
 
+  .content1-left,
+  .content2-left,
+  .content3-left,
+  .content5-left {
+    padding-left: 5%;
+  }
+
+  .logo {
+    margin-right: 0;
+  }
+
+  .response {
+    width: 100%;
+  }
+
   .content-left,
   .content-right {
     width: 100%;
   }
+
+  .future {
+    margin-top: 10%;
+  }
 }
+
+@media (max-width: 425px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .content1,
+  .content2,
+  .content3,
+  .content4,
+  .content5 {
+    flex-direction: column;
+  }
+
+  .content1-left,
+  .content2-left,
+  .content3-left,
+  .content4-right,
+  .content5-left,
+  .content6-left {
+    width: 90%;
+    text-align: left;
+  }
+
+  .content6-left {
+    margin-left: 5%;
+  }
+
+  .logo {
+    margin-right: 0;
+    font-size: 1rem;
+  }
+
+  .response {
+    width: 100%;
+  }
+
+  .content-left,
+  .content-right {
+    width: 100%;
+  }
+
+  .future {
+    margin-top: 15%;
+    font-size: 2.3rem;
+    line-height: 60px;
+  }
+
+  .precision {
+    font-size: 17px;
+  }
+}
+
 
 .whatsapp-icon img {
   width: 50px;
@@ -599,18 +699,22 @@ img {
   padding-bottom: 15%;
   position: relative;
 }
+
 .h1,
 .h4 {
   color: white;
 }
+
 .h4 {
   padding: 3.5rem;
   margin-left: 3rem;
 }
+
 .h1 {
   padding: 1.5rem;
   margin-left: 5.5rem;
 }
+
 .image-container {
   display: flex;
   justify-content: space-around;
@@ -634,9 +738,11 @@ img {
   transform: scale(1.05);
   cursor: pointer;
 }
+
 a {
   text-decoration: none;
 }
+
 a:hover {
   cursor: auto;
 }
