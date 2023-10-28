@@ -54,6 +54,7 @@ def home():
 
         # Extract the assistant's response
     response = response['choices'][0]['message']['content']
+    items = 0
     if current_user.is_authenticated:
         user_id=current_user.id
         cart_items = Cart.query.filter_by(user_id=user_id).all()
@@ -824,17 +825,23 @@ def MpesaExpress():
         "PartyA":phone,    
         "PartyB":"174379", 
         "PhoneNumber": phone,   
-        "CallBackURL":my_endpoint,    
+        "CallBackURL":my_endpoint+'/lnmo',    
         "AccountReference":"Agrisense",    
         "TransactionDesc":"HelloTest",
         "Amount": amount  
 
     }
     res = requests.post(endpoint, json=data, headers=headers)
-    print(request.get_json)
-    clear_cart()
-    return res.json()
-
+    return data
+    '''
+    if response['Body']['stkCallback']['ResultDesc'] == 'Request cancelled by user':
+        flash('Payment Unsuccesful','danger')
+        return redirect(url_for('store'))
+    else:
+        flash('Payment Succesfull!','success')
+        clear_cart()
+        return redirect(url_for('store'))
+    '''
 def getAccesstoken():
     consumer_key = 'MxDfkY05AO0RFqKYGnBhp1LBjCNjTMqY'
     consumer_secret = 'M5lcztAHirHGAf6X'

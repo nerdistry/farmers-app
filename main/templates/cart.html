@@ -149,7 +149,7 @@
                 <p>Price: KES {{item.price*item.quantity}}</p>
                 <hr>
                 <p>Total Amount: KES {{ final_total|round(2) }}</p>
-                <input type="text" readonly name="amount" value="{{ final_total}}">
+                <input type="hidden" readonly name="amount" value="{{ final_total}}">
             </div>
             {% endfor %}
           </div>
