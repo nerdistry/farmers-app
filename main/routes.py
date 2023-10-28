@@ -1,4 +1,3 @@
-
 import os, openai, io, base64, requests
 from markupsafe import Markup
 import secrets
@@ -13,7 +12,6 @@ from main.models import BlogPost, Category, Conversation, User, Addproduct
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message, Mail
 from datetime import datetime, timedelta
-
 import matplotlib.pyplot as plt
 from PIL import Image
 from base64 import b64decode
