@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="{{ session['user_language'] }}">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+</head>
+<body>
+<form action="/settings" method="post">
+    <select name="language">
+        <option value="fr">{{ _('Français') }}</option>
+        <option value="es">{{ _('Español') }}</option>
+        <option value="sw">{{ _('Kiswahili') }}</option>
+    </select>
+    <input type="submit" value="{{ _('Change Language') }}">
+</form>
+</body>
+</html>
