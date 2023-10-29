@@ -707,7 +707,7 @@ def addproduct():
         db.session.commit()
         flash(f"The product {name} has been added to your database", 'success')
         return redirect(url_for('addproduct'))
-    return render_template('addproduct.html', title="Add Product Page", form=form, category=category, items=items)
+    return render_template('addproduct.html', title="Add Product Page", form=form, category=category, items=items, active_page=active_page)
 
 
 @app.route('/admin')
@@ -803,7 +803,7 @@ def clear_cart():
 
     return redirect(url_for('cart'))
 
-my_endpoint = "https://eot4e959u7dyxed.m.pipedream.net"
+my_endpoint = "ngrok endpoint"
 @app.route('/pay', methods=['POST','GET'])
 def MpesaExpress():
     getAccesstoken()
@@ -834,7 +834,7 @@ def MpesaExpress():
         "PartyA":phone,    
         "PartyB":"174379", 
         "PhoneNumber": phone,   
-        "CallBackURL":my_endpoint + '/lnmo-callback',    
+        "CallBackURL":my_endpoint + '/callback',    
         "AccountReference":"Agrisense",    
         "TransactionDesc":"HelloTest",
         "Amount": final_total  
@@ -842,21 +842,15 @@ def MpesaExpress():
     }
     res = requests.post(endpoint, json=data, headers=headers)
     res.json()
-    return incoming()
+    flash('Thank you for shopping at Agrisense! You order is being processed.','success')
+    return redirect('cart')
     
-@app.route('/lnmo-callback', methods=['POST'])
+@app.route('/callback', methods=['POST'])
 def incoming():
-    print(request.headers)
     data = request.get_json()
     print(data)
-    result_code = data['Body']['stkCallback']['ResultCode']
-    if result_code == 0:
-        flash('Payment successful!', 'success')
-        clear_cart() 
-        return redirect(url_for('cart'))
-    elif result_code == 1032:
-        flash('Payment Unsuccessful!')
-        return redirect(url_for('cart'))
+    return "ok"
+
 
 
 
