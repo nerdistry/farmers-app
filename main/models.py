@@ -53,8 +53,13 @@ class BlogPost(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
+    @property
+    def formatted_title(self):
+        return f"<b>{self.title.capitalize()}</b>"
+
     def __repr__(self):
         return f"Blogpost('{self.title}', '{self.date_posted}')"
+
 
 
 class Category(db.Model):

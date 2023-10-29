@@ -20,7 +20,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='main.css') }}"
+      href="{{ url_for('static', filename='css/main.css') }}"
     />
 
     {% if title %}
@@ -52,27 +52,6 @@
             <a href="{{ url_for('logout') }}">Logout</a>
           </div>
         </div>
-
-        <div class="whatsapp-icon" onclick="showPopup()">
-          <img
-            src="{{ url_for('static', filename='pictures/icons8-whatsapp(normal).svg') }}"
-            alt="WhatsApp"
-          />
-        </div>
-
-        <div class="popup" id="popup">
-          <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <h2>Scan to chat with AgriSense</h2>
-            <img
-              class="qr-code"
-              src="{{ url_for('static', filename='pictures/qr-code.png') }}"
-              alt="QR Code"
-            />
-          </div>
-        </div>
-
-        <script src="{{ url_for('static', filename='script2.js') }}"></script>
         {% else %}
         <a href="{{ url_for('home') }}" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
         <a href="{{ url_for('about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a>

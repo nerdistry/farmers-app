@@ -1,60 +1,46 @@
-{% extends "layout.html" %}
-{% block content %}
-    <div class="content-section">
-        <div class="media">
-            <img class="rounded-circle account-img" src="{{ image_file }}">
-            <div class="media-body">
-                <h2 class="account-heading">{{ current_user.username }}</h2>
-                <p class="text-secondary">{{ current_user.email }}</p>
-            </div>
-        </div>
-            <form method="POST" action="" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Account Info</legend>
+{%  extends "navbar.html" %}
+{% block nav %}
+<link
+      rel="stylesheet"
+      type="text/css"
+      
+      href="{{ url_for('static', filename='css/account.css') }}"
+    />
+<div class="">
+    <div class="container">
+        {% from "_formhelpers.html" import render_field %}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+            <div class=" loginbg">
+                <div class="media">
+                    <img class="rounded-circle account-img" src="{{ image_file }}" style="height: 100px; width: 100px;">
+                    <div class="media-body col-md-3" >
+                        <h2 class="account-heading">{{ current_user.username }}</h2>
+                        <p class="text-secondary">{{ current_user.email }}</p>
+                    </div>
+                </div><hr>
+
+                <form method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
                     <div class="form-group">
-                        {{ form.username.label(class="form-control-label") }}
-    
-                        {% if form.username.errors %}
-                            {{ form.username(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.username.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.username(class="form-control form-control-lg") }}
-                        {% endif %}
+                        {{ render_field(form.username, class="form-control") }}
                     </div>
                     <div class="form-group">
-                        {{ form.email.label(class="form-control-label") }}
-    
-                        {% if form.email.errors %}
-                            {{ form.email(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.email.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.email(class="form-control form-control-lg") }}
-                        {% endif %}
+                        {{ render_field(form.email, class="form-control") }}
                     </div>
                     <div class="form-group">
-                        {{ form.picture.label() }}
-                        {{ form.picture(class="form-control-file") }}
-                        {% if form.picture.errors %}
-                            {% for error in form.picture.errors %}
-                            <span class="text-danger">{ error }</span></br>
-                            {% endfor %}
-                        {% endif %}
+                        {{ render_field(form.picture, class="") }}
                     </div>
-                    
-                </fieldset>
-                <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    <button type="submit" class="login-button">Update</button>
+
+                </form>
                 </div>
-            </form>
-    </div> 
-{% endblock content %}
+            </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</div> 
+{% endblock nav %}
 

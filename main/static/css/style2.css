@@ -1,0 +1,118 @@
+body{
+	height: 100%;
+	margin: 0;
+	background-color:white;
+}
+.active{
+	background-color: #595454;
+	border-bottom: 1px solid #333;
+}
+.text1 {
+	color: black;
+	font-size: 40px;
+	font-family: Montserrat;
+	font-weight: 400;
+	line-height: 43.2px;
+	letter-spacing: 1.92px;
+	word-wrap: break-word;
+  }
+.text2 {
+	color: black;
+	font-size: 16px;
+	font-family: Montserrat;
+	font-weight: 400;
+	line-height: 28.8px;
+	letter-spacing: 0.64px;
+	word-wrap: break-word;
+  }
+
+.chat{
+	margin-top: auto;
+	margin-bottom: auto;
+}
+.card{
+	height: 800px;
+	width: 150%;
+	border-radius: 15px !important;
+	background-color: #83BD75;
+    overflow: auto;
+	margin-left: -23%;
+}
+.arrow{
+	display: flex;
+}
+.h2{
+	padding: 25px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	color: white;
+	font-size: 20px;
+	font-family: poppins;
+	font-weight: 700;
+	letter-spacing: 7px;
+	word-wrap: break-word;
+
+}
+
+.button1 {
+	background-color: white;
+	color: black;
+	border: 1px solid black;
+	padding: 8px;
+	border-radius: 12px;
+  
+	font-size: 16px;
+	font-family: poppins;
+	font-weight: 400;
+	line-height: 22.4px;
+	word-wrap: break-word;
+  }
+  .button1:hover {
+	background-color: #4e944f;
+	cursor: pointer;
+	color: white;
+  }
+.button{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-container {
+    display: flex;
+    margin-left: 4%;
+	padding: -20px;
+}
+
+.textarea-container {
+    max-width: 100%;
+    max-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.images{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	margin-left: 5%;
+}
+#response {
+    width: 80%; /* Use 80% of the container's width */
+    resize: vertical;
+}
+
+textarea {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+@media(max-width: 576px){
+	.contacts_card{
+	margin-bottom: 15px !important;
+}
+}

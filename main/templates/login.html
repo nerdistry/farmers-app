@@ -1,52 +1,42 @@
-{% extends "layout.html" %}
-{% block content %}
-    <div class="content-section">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Log In</legend>
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
+{%  extends "navbar.html" %}
+{% block nav %}
+<link
+      rel="stylesheet"
+      type="text/css"
+      
+      href="{{ url_for('static', filename='css/login.css') }}"
+    />
+<div class="loginbackgroundimage">
+    <div class="container">
+        {% from "_formhelpers.html" import render_field %}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                
+                <div class=" loginbg">
+                    <h1 class="text-center text-black" class="agrisense">AGRISENSE</h1>
+                <p class="text-center text-black">Welcome back</p><hr>
+                <form method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ render_field(form.email, class="form-control", placeholder="Enter Your Email") }}
+                    </div>
+                    <div class="form-group">
+                        {{ render_field(form.password, class="form-control", placeholder="Enter Your Password") }}
+                    </div>
+                    <small class="text-muted ml-2">
+                        <a href="{{url_for('reset_request')}}">Forgot Password?</a>
+                    </small><hr>
+                    <button type="submit" class="login-button">Login</button>
+
+                </form><br><hr>
+                <p class="text-center text-black" style="font-size:12px;"><i>By continuing, you agree to AGRISENSE's<br><b>Terms of Service</b> and acknowledge you've read our<br><b>Privacy Policy.</b><i></p>
+
                 </div>
-                <div class="form-group">
-                    {{ form.password.label(class="form-control-label") }}
-                    {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-check">
-                    {{ form.remember(class="form-check-input") }}
-                    {{ form.remember.label(class="form-check-label") }}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-            <small class="text-muted ml-2">
-                <a href="{{url_for('reset_request')}}">Forgot Password?</a>
-            </small>
-        </form>
+            <div class="col-md-4"></div>
+        </div>
     </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
-        </small>
-    </div>
-{% endblock content %}z
+</div>
+{% endblock nav %}
+

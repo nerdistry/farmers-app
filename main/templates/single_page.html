@@ -1,10 +1,11 @@
-{% extends "layout.html" %} {% block content%}
+{% extends "layout.html" %}
+{% block content%}
 
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-6" id="b_image">
       <img
-        src="{{url_for('static', filename='images/' + product.image_1)}}"
+        src="{{url_for('static', filename='products_images/' + product.image_1)}}"
         alt="{{product.name}}"
         width="400"
         height="400"
@@ -20,7 +21,7 @@
       <hr />
       <form action="{{url_for('cart')}}" method="post">
         <input type="hidden" name="product_id" value="{{product.id}}" />
-        <a href="/{{product.id}}/add_to_cart">
+        <a href="/{{product.id}}/add_to_cart" class="button1 btn">
           Add to cart
         </a>
         <label for="">Quantity:</label>
@@ -40,21 +41,21 @@
     <div class="col-md-12 mt-3" id="s_image">
       <hr />
       <img
-        src="{{url_for('static', filename='images/' + product.image_1)}}"
+        src="{{url_for('static', filename='products_images/' + product.image_1)}}"
         alt="{{product.name}}"
         width="120"
         height="120"
         class="p-3"
       />
       <img
-        src="{{url_for('static', filename='images/' + product.image_2)}}"
+        src="{{url_for('static', filename='products_images/' + product.image_2)}}"
         alt="{{product.name}}"
         width="120"
         height="120"
         class="p-3"
       />
       <img
-        src="{{url_for('static', filename='images/' + product.image_3)}}"
+        src="{{url_for('static', filename='products_images/' + product.image_3)}}"
         alt="{{product.name}}"
         width="120"
         height="120"
