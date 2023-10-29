@@ -15,7 +15,7 @@
 
 
 <div class="container" id="scroll-target">
-  <div class="text-center bg-success p-2" style="color:black; font-size: 35px;">Products</div>
+  <div class="text-center p-2 precision" style="color:black; font-size: 35px; font-weight: bold;">Products</div>
   <div class="row">
     {% for product in products %}
     <div class="col-md-3 mt-5">
@@ -28,7 +28,7 @@
         </div>
         <div class="card-footer">
           <a href="{{url_for('single_page', id=product.id)}}" class="btn button1">Details</a>
-          <a href="#" class="btn button1">Add to cart</a>
+          <a href="/{{product.id}}/add_to_cart" class="btn button1">Add to cart</a>
         </div>
       </div>
     </div>

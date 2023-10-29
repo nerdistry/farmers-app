@@ -14,9 +14,9 @@
             <h1 class="text-center p-2">Add a product</h1>
             {% from "_formhelpers.html" import render_field %}
             <form action="" method="POST" enctype="multipart/form-data">
-                {{ render_field(form.name, class="form-control", placeholder="Add product name") }}
-                {{ render_field(form.price, class="form-control", placeholder="Add product price") }}
-                {{ render_field(form.stock, class="form-control", placeholder="Add product stock") }}
+                {{ render_field(form.name, class="form-control") }}
+                {{ render_field(form.price, class="form-control") }}
+                {{ render_field(form.stock, class="form-control") }}
 
                 <label for="category">Add a category</label>
                 <select name="category" id="category" class="form-control" required>
@@ -25,7 +25,7 @@
                     <option value="{{category.id}}"> {{category.category}}</option>
                     {% endfor %}
                 </select>
-                {{ render_field(form.description, class="form-control", placeholder="Add product detail", rows="10") }}
+                {{ render_field(form.description, class="form-control", placeholder="Input the description of the product", rows="10") }}
 
                 <div class="container">
                     <div class="row">
