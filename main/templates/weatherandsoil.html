@@ -1,13 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-<!DOCTYPE html>
-<html>
 
-<head>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='weather.css') }}">
-</head>
-
-<body>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather.css') }}">
   <section class="main">
     <div class="content">
       <div class="main-body">
@@ -97,7 +91,4 @@
       </div>
     </div>
   </section>
-</body>
-
-</html>
 {% endblock content %}

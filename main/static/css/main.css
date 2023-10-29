@@ -226,10 +226,10 @@ li {
 }
 
 .storesection {
-  background-image: url("bgbg.jpg");
+  background-image: url("../pictures/bgbg.jpg");
   background-size: cover;
   background-position: center;
-  height: 92vh;
+  height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -307,7 +307,7 @@ a.cart-card {
 
 .section1 {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("pictures/bg.jpg");
+    url("../pictures/bg.jpg");
   background-size: cover;
   background-position: center;
   height: 95vh;
