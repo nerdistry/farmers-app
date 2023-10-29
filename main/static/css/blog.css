@@ -1,0 +1,49 @@
+
+
+body{
+    font-family:montserrat;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../pictures/lgbgg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+/* Style for the content div */
+.loginbg {
+    background-color: white; /* Semi-transparent white background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Set your desired maximum width */
+    padding:17%;
+    border-radius:15px;
+    padding-top:10%;
+  }
+
+.container{
+    margin-top: 5%;
+}
+  
+
+/* Button styles */
+.login-button {
+    color: black; /* Default text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    width: 100%
+}
+
+/* Button styles on hover */
+.login-button:hover {
+    background-color: #4E944F; /* New background color on hover */
+    color: white;
+}
+
+
+@media(max-width: 576px){
+	.contacts_card{
+	margin-bottom: 15px !important;
+}
+}

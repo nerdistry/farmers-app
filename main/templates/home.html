@@ -1,10 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
+
+<div class="whatsapp-icon" onclick="showPopup()">
+    <img
+      src="{{ url_for('static', filename='pictures/icons8-whatsapp(normal).svg') }}"
+      alt="WhatsApp"
+    />
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span><br>
+      <h2>Scan to chat with AgriSense</h2>
+      <img
+        class="qr-code"
+        src="{{ url_for('static', filename='pictures/qr-code.png') }}"
+        alt="QR Code"
+      />
+    </div>
+  </div>
+
+<script src="{{ url_for('static', filename='js/script2.js') }}"></script>
 <section class="section1">
     <div class="content">
         <div class="logo">AGRISENSE</div>
-        <div class="response" style="margin-right:18%">{{response}}</div>
     </div>
+    <div class="">{{response}}</div>
     <div class="future">THE FUTURE OF<br>AGRICULTURE</div>
     <div class="precision">Precision Farming with AI-Powered Crop<br>Recommendations</div>
 </section>

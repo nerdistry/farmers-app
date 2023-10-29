@@ -81,7 +81,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password,phone=form.phone.data, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, phone=form.phone.data, farm=form.farm.data, typeoffarming=form.typeoffarming.data)
 
         # Generate a confirmation token
         token = serializer.dumps(user.email, salt='email-confirm')
@@ -141,7 +141,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 
 def save_picture(form_picture):
@@ -270,14 +270,19 @@ def weatherandsoil():
         print(soil_data)
     return render_template('weatherandsoil.html', weather_data=weather_data, soil_data=soil_data, active_page=active_page)
 
+from sqlalchemy import desc  # Import desc for descending order
+
 @app.route("/viewposts", methods=['GET', 'POST'])
 @login_required
 def viewposts():
     active_page = 'viewposts'
-    user_id=current_user.id
+    user_id = current_user.id
     cart_items = Cart.query.filter_by(user_id=user_id).all()
     items = len(cart_items)
-    blogpost = BlogPost.query.all()
+    
+    # Query blog posts in descending order of their creation date
+    blogpost = BlogPost.query.order_by(desc(BlogPost.date_posted)).all()
+    
     form = BlogPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -289,6 +294,7 @@ def viewposts():
         return redirect(url_for('viewposts'))
     
     return render_template('viewposts.html', blogpost=blogpost, form=form, active_page=active_page, items=items)
+
 
 @app.route('/marketplace')
 def marketplace():
@@ -639,7 +645,7 @@ import hashlib
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-UPLOAD_FOLDER = 'static/images'
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
