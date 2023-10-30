@@ -18,6 +18,15 @@ body{
     padding-top:10%;
   }
 
+  .loginbg2 {
+    background-color: white; /* Semi-transparent white background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 140%; /* Set your desired maximum width */
+    padding:8%;
+    border-radius:15px;
+    
+  }
+
 .container{
     margin-top: 5%;
 }
@@ -44,7 +53,6 @@ body{
     background-color: #4E944F; /* New background color on hover */
     color: white;
 }
-
 
 @media(max-width: 576px){
 	.contacts_card{
