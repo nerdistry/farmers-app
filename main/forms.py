@@ -86,10 +86,10 @@ class BlogPostForm(FlaskForm):
     submit = SubmitField('Post')
     
 class AddProductsForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    price= IntegerField('Price', validators=[DataRequired()])
-    stock = IntegerField('Stock', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()], render_kw={"placeholder": "Input the name of the product"})
+    price= IntegerField('Price', validators=[DataRequired()], render_kw={"placeholder": "Input the price per kilogramme(kg)"})
+    stock = IntegerField('Stock', validators=[DataRequired()], render_kw={"placeholder": "Input the stock in kilograms(kgs)"})
+    description = TextAreaField('Description', validators=[DataRequired()], render_kw={"placeholder": "Input product Description"})
     
     image_1 = FileField('image_1', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
     image_2 = FileField('image_2', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
