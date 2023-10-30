@@ -1,4 +1,4 @@
-[AgriSense Logo](\main\static\assets\agri.png)
+![AgriSense Logo](\main\static\assets\agri.png)
 
 #  **AgriSense**
 
