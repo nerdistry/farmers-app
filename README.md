@@ -1,15 +1,22 @@
-![AgriSense Logo](\main\static\assets\agri.png)
+![AgriSense Logo](main/static/pictures/agri-logo.png)
 
 #  **AgriSense**
 
-
-**Welcome to AgriSense!** AgriSense is designed to provide farmers with detailed responses, using Generative AI, based on their location. Our system identifies a user's location through an API, which is then passed on to weather and soil APIs as this information is crucial for farmers. By leveraging Generative AI, and incorporating methods such as langchain for embedding, our system provides detailed and accurate farming solutions.
-
-Additionally, we have an integrated WhatsApp bot, capable of handling both images and text. This bot has been trained on the PlantVillage dataset using transfer learning (ResNet). More information on this feature can be found in its dedicated repository.
+**Welcome to the AgriSense Repository!** 
+AgriSense is a Generative AI-based solution that aims to provide farmers with expert advice on agriculture.
+Our solution does this by fetching the farmer's geo-details, providing crop recommendations, crop farming plans, and a specialized chatbot available on the web and also via WhatsApp.
+More information on these features can be found in the repository.
 
 ## **Purpose of AgriSense**
 
-AgriSense aims to address the challenges faced by farmers by providing accurate and location-specific farming solutions using the power of Generative AI.
+AgriSense aims to address farmers' challenges by providing precise and location-specific farming solutions powered by Generative AI. It uses APIs to determine the farmer's location and geo-details such as weather, soil, wind, humidity level, and so on. It feeds that data into our trained generative AI model, gpt-3.5-turbo, which generates images and short descriptions of recommended crops, as well as farming rotation plans to ensure the farm's success. It also contains information on pests and diseases that are likely to infest the farm if the recommended crops are planted, as well as resources for dealing with them. It has a web-based chatbot as well as a [WhatsApp](https://github.com/nerdistry/gpt_bot) chatbot powered by a pre-trained [model](https://github.com/nerdistry/plant-village-trained-model). It also fosters a sense of community by allowing farmers to comment and rate the effectiveness of the solution.
+
+## **Structure**
+The repository is structured as follows:  
+Resources such as the CSS and images are located in the static folder.  
+The web pages are located in the templates folder.  
+The models are in the main folder which encompasses the bulk of the repository.  
+The Whatsapp bot is located in this [repo](https://github.com/nerdistry/gpt_bot) and the model it is based on is located [here](https://github.com/nerdistry/plant-village-trained-model).
 
 ## **Tech Stack**
 - [Flask](https://palletsprojects.com/p/flask/)
