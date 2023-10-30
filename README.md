@@ -1,10 +1,7 @@
-Certainly! Here's the markdown:
+![AgriSense Logo](\main\static\assets\agri.png)
 
----
+#  **AgriSense**
 
-# 🌱 **AgriSense**
-
-![AgriSense Logo](\main\static\assets\agri.ico)
 
 **Welcome to AgriSense!** AgriSense is designed to provide farmers with detailed responses, using Generative AI, based on their location. Our system identifies a user's location through an API, which is then passed on to weather and soil APIs as this information is crucial for farmers. By leveraging Generative AI, and incorporating methods such as langchain for embedding, our system provides detailed and accurate farming solutions.
 
@@ -25,13 +22,13 @@ To set up the environment, ensure you have Flask and MySQL installed. You can do
 Before starting, you need to set up your `.env` file:
 
 ```markdown
-APPSECRET_KEY = 'AgriSense'
+APPSECRET_KEY = '<YOUR APP SECRET KEY>'
 OPENWEATHER_API_KEY = '<YOUR OPEN WEATHER KEY>'
 AMBEEDATA_API_KEY = '<YOUR AMBEEDATA KEY>'
 OPENAI_KEY = '<YOUR OPEN AI KEY>'
 HF_API_KEY = '<YOUR HUGGING FACE KEY>'
 ```
-To obtain API keys, visit the following links:
+To obtain API keys, visit the following links, sign up and you will be good to go:
 - [OpenWeather](https://home.openweathermap.org/users/sign_up)
 - [AmbeeData](https://www.ambeedata.com/)
 - [OpenAI](https://www.openai.com/)
