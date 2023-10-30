@@ -174,12 +174,14 @@ def account():
             current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.phone = form.phone.data
         db.session.commit()
         flash('Account Updated!', 'success')
         return redirect(url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        form.phone.data = current_user.phone
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page, items=items)
 

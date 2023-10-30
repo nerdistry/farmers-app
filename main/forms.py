@@ -45,6 +45,7 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=15)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    phone = StringField('Phone Number',validators=[DataRequired(), Length(min=12, max=13)])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update')
 
@@ -60,6 +61,7 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email = email.data).first()
             if user:
                 raise ValidationError('This Email is taken, please choose a different one')
+    
             
 
 class RequestResetForm(FlaskForm):
