@@ -60,6 +60,8 @@ def home():
         cart_items = Cart.query.filter_by(user_id=user_id).all()
         items = len(cart_items)
 
+        return render_template('home.html', active_page=active_page, response=response, items=items)
+    
     return render_template('home.html', active_page=active_page, response=response)
 
 @app.route("/about")
@@ -172,12 +174,14 @@ def account():
             current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.phone = form.phone.data
         db.session.commit()
         flash('Account Updated!', 'success')
         return redirect(url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        form.phone.data = current_user.phone
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form, active_page=active_page, items=items)
 
@@ -385,7 +389,7 @@ def stablediffusion_image(hf_api_key, text):
     return None
 
 '''ChatCompletion Model'''
-model = 'ft:gpt-3.5-turbo-0613:agrisense::8DJIv1Rs'
+model = 'ft:gpt-3.5-turbo-0613:agrisense::8FG4htCV'
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
@@ -657,6 +661,12 @@ def generate_hex_name(filename):
     unique_filename = f"{uuid4()}.{extension}"
     return unique_filename
 
+def resize(width, height, path):
+    with Image.open(path) as img:
+        width, height = 300, 300  # Set your desired dimensions
+        img = img.resize((width, height))
+        img.save(path)
+    return img
 
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
@@ -683,18 +693,33 @@ def addproduct():
         if image_1 and allowed_file(image_1.filename):
             unique_filename_1 = generate_hex_name(image_1.filename)
             image_1.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_1)))
+            image_1_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_1))
+            with Image.open(image_1_path) as img:
+                width, height = 300, 300  # Set your desired dimensions
+                img = img.resize((width, height))
+                img.save(image_1_path)
         else:
             unique_filename_1 = None  # Or some default image if none is provided
 
         if image_2 and allowed_file(image_2.filename):
             unique_filename_2 = generate_hex_name(image_2.filename)
             image_2.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_2)))
+            image_2_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_2))
+            with Image.open(image_2_path) as img:
+                width, height = 300, 300  # Set your desired dimensions
+                img = img.resize((width, height))
+                img.save(image_2_path)
         else:
             unique_filename_2 = None
 
         if image_3 and allowed_file(image_3.filename):
             unique_filename_3 = generate_hex_name(image_3.filename)
             image_3.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_3)))
+            image_3_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(unique_filename_3))
+            with Image.open(image_3_path) as img:
+                width, height = 300, 300  # Set your desired dimensions
+                img = img.resize((width, height))
+                img.save(image_3_path)
         else:
             unique_filename_3 = None
 
@@ -713,7 +738,7 @@ def addproduct():
         db.session.commit()
         flash(f"The product {name} has been added to your database", 'success')
         return redirect(url_for('addproduct'))
-    return render_template('addproduct.html', title="Add Product Page", form=form, category=category, items=items)
+    return render_template('addproduct.html', title="Add Product Page", form=form, category=category, items=items, active_page=active_page)
 
 
 @app.route('/admin')
@@ -738,7 +763,8 @@ def single_page(id):
     cart_items = Cart.query.filter_by(user_id=user_id).all()
     items = len(cart_items)
     product = Product.query.get_or_404(id)
-    flash('Product added to cart succesfully!.', 'success')
+    if request.method == 'POST':
+        flash('Product added to cart succesfully!', 'success')
         
     return render_template('single_page.html', product=product, items=items)
 
@@ -758,13 +784,15 @@ def cart():
     products = []
     items = len(cart_items)
     final_total = 0
+    phone = current_user.phone
     for item in cart_items:
         product = Product.query.get(item.product_id)
         product.quantity = item.quantity
         final_total += product.price * product.quantity
         final_total = int(final_total)
         products.append(product)
-    return render_template('cart.html', cart=products, final_total=final_total, items=items)
+        
+    return render_template('cart.html', cart=products, final_total=final_total, items=items, phone=phone)
 
 @app.route('/<int:product_id>/add_to_cart', methods=['POST','GET'])
 def add_to_cart(product_id):
@@ -780,7 +808,7 @@ def add_to_cart(product_id):
     else:
         flash('You need to log in to add items to your cart','danger')
         return redirect(url_for('login'))
-    flash('Product added to cart succesfully!.', 'success')
+    flash('Product added to cart succesfully!', 'success')
     return redirect(url_for('store'))
 
 @app.route('/cart/<int:product_id>/remove', methods=["POST", "GET"])
@@ -809,7 +837,7 @@ def clear_cart():
 
     return redirect(url_for('cart'))
 
-my_endpoint = "https://eot4e959u7dyxed.m.pipedream.net"
+my_endpoint = "https://78ef-102-213-179-25.ngrok-free.app"
 @app.route('/pay', methods=['POST','GET'])
 def MpesaExpress():
     getAccesstoken()
@@ -840,32 +868,24 @@ def MpesaExpress():
         "PartyA":phone,    
         "PartyB":"174379", 
         "PhoneNumber": phone,   
-        "CallBackURL":my_endpoint + '/lnmo-callback',    
+        "CallBackURL":my_endpoint + '/callback',    
         "AccountReference":"Agrisense",    
         "TransactionDesc":"HelloTest",
         "Amount": final_total  
 
     }
     res = requests.post(endpoint, json=data, headers=headers)
-    res.json()
-    return incoming()
+    res.json()    
+    clear_cart()
+    flash('Thank you for shopping with Agrisense! Your order is being processed.', 'success')
+    return redirect(url_for('cart'))
+        
     
-@app.route('/lnmo-callback', methods=['POST'])
+@app.route('/callback', methods=['POST'])
 def incoming():
-    print(request.headers)
     data = request.get_json()
     print(data)
-    result_code = data['Body']['stkCallback']['ResultCode']
-    if result_code == 0:
-        flash('Payment successful!', 'success')
-        clear_cart() 
-        return redirect(url_for('cart'))
-    elif result_code == 1032:
-        flash('Payment Unsuccessful!')
-        return redirect(url_for('cart'))
-
-
-
+    return "ok"
 
 def getAccesstoken():
     consumer_key = 'MxDfkY05AO0RFqKYGnBhp1LBjCNjTMqY'

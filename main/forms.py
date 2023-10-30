@@ -45,6 +45,7 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=15)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    phone = StringField('Phone Number',validators=[DataRequired(), Length(min=12, max=13)])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update')
 
@@ -60,6 +61,7 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email = email.data).first()
             if user:
                 raise ValidationError('This Email is taken, please choose a different one')
+    
             
 
 class RequestResetForm(FlaskForm):
@@ -86,10 +88,10 @@ class BlogPostForm(FlaskForm):
     submit = SubmitField('Post')
     
 class AddProductsForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    price= IntegerField('Price', validators=[DataRequired()])
-    stock = IntegerField('Stock', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()], render_kw={"placeholder": "Input the name of the product"})
+    price= IntegerField('Price', validators=[DataRequired()], render_kw={"placeholder": "Input the price per kilogramme(kg)"})
+    stock = IntegerField('Stock', validators=[DataRequired()], render_kw={"placeholder": "Input the stock in kilograms(kgs)"})
+    description = TextAreaField('Description', validators=[DataRequired()], render_kw={"placeholder": "Input product Description"})
     
     image_1 = FileField('image_1', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])
     image_2 = FileField('image_2', validators=[FileRequired('Image is required'), FileAllowed(['jpg', 'png', 'jpeg'], 'images only please')])

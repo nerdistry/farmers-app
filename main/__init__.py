@@ -18,6 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:bella@localhost/agrisense'
 
+
 app.config.from_pyfile('../config.cfg')
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/products_images')
 app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/Products_images'))
