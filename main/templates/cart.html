@@ -93,13 +93,13 @@
                 </div>
                 {% for item in cart %}
                 <div style="text-align: left;">
-                  <p>Product: {{ item.name }}</p>
-                  <p>SellerID: {{item.user_id}}</p>
-                  <p>Quantity: {{ item.quantity }}</p>
-                  <p>Tax/VAT: N/A</p>
-                  <p>Price: KES {{item.price*item.quantity}}</p>
+                  <p><strong><small>Product:</small></strong> {{ item.name }}</p>
+                  <p><strong><small>SellerID:</small></strong> {{item.user_id}}</p>
+                  <p><strong><small>Quantity:</small></strong> {{ item.quantity }}</p>
+                  <p><strong><small>Tax/VAT:</small></strong> N/A</p>
+                  <p><strong><small>Price:</small></strong> KES {{item.price*item.quantity}}</p>
                   <hr>
-                  <p>Total Amount: KES {{ final_total|round(2) }}</p>
+                  <p><strong>Total Amount: KES {{ final_total|round(2) }}</strong></p>
                 </div>
                 {% endfor %}
               </div>
