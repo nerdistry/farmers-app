@@ -1,5 +1,6 @@
-![AgriSense Logo](main/static/pictures/agri-logo.png)
-
+<p align="center">
+  <img src="main/static/pictures/agri-logo.png" alt="AgriSense Logo">
+</p>
 #  **AgriSense**
 
 **Welcome to the AgriSense Repository!** 
