@@ -47,13 +47,13 @@
                         <img class="rounded-circle article-img" style="height: 30px; width: 30px;" src="{{ url_for('static', filename='profilepics/' + content.user.image_file) }}">
                         <div class="media-body">
                             <div class="article-metadata">
-                                <a class="mr-2" href="#">{{ content.user.username }}</a>
+                                <a class="mr-2" href="#"><b>{{ content.user.username }}</b></a>
                                 <small class="text-muted">{{ content.date_posted.strftime('%Y-%m-%d') }}</small>
                             </div>
-                            <p class="article-content">{{ content.title }}</p>
+                            <p class="article-content"><b>{{ content.title }}</b></p>
                             <p class="article-content">{{ content.content }}</p>
                         </div>
-                    </article>
+                    </article><hr>
                     
                     {% endfor %}
                 </div>

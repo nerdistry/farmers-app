@@ -59,3 +59,7 @@ body{
 	margin-bottom: 15px !important;
 }
 }
+a{
+  text-decoration: none;
+  color: #4E944F;
+}
