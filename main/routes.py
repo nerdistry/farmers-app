@@ -389,7 +389,7 @@ def stablediffusion_image(hf_api_key, text):
     return None
 
 '''ChatCompletion Model'''
-model = 'ft:gpt-3.5-turbo-0613:agrisense::8FG4htCV'
+model = 'gpt-3.5-turbo-16k'
 @app.route('/farminginfo', methods=['GET', 'POST'])
 def farminginfo():
     active_page = 'farminginfo'
